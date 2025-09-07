@@ -1,0 +1,23 @@
+.app-body {
+  display: flex;
+  height: calc(100vh - 80px); /* Subtract header height */
+  width: 100%;
+}
+
+.app-body > * {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .app-body {
+    flex-direction: column;
+    height: auto;
+    min-height: calc(100vh - 80px);
+  }
+
+  .app-body > * {
+    flex: none;
+    height: 50vh;
+    min-height: 300px;
+  }
+}
