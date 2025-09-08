@@ -3,8 +3,8 @@
     <h2 class="fields-outlet__title">{{ title }}</h2>
   }
 
-  <form class="fields-outlet__form" (ngSubmit)="onSubmit($event)">
-    @for (field of fields; track field.id) {
+  @if (field) {
+    <form class="fields-outlet__form" (ngSubmit)="onSubmit($event)">
       <div class="field-container">
         <label [for]="field.id" class="field-label">
           {{ field.label }}
@@ -19,12 +19,12 @@
               type="text"
               [id]="field.id"
               [name]="field.id"
-              [value]="getFieldValue(field.id)"
+              [value]="getFieldValue()"
               [placeholder]="field.placeholder || ''"
               [required]="field.required"
-              (input)="onFieldChange(field.id, $event)"
+              (input)="onFieldChange($event)"
               class="field-input"
-              [class.field-input--error]="getFieldError(field.id)"
+              [class.field-input--error]="getFieldError()"
             />
           }
           @case ('number') {
@@ -32,12 +32,12 @@
               type="number"
               [id]="field.id"
               [name]="field.id"
-              [value]="getFieldValue(field.id)"
+              [value]="getFieldValue()"
               [placeholder]="field.placeholder || ''"
               [required]="field.required"
-              (input)="onFieldChange(field.id, $event)"
+              (input)="onFieldChange($event)"
               class="field-input"
-              [class.field-input--error]="getFieldError(field.id)"
+              [class.field-input--error]="getFieldError()"
             />
           }
           @case ('email') {
@@ -45,12 +45,12 @@
               type="email"
               [id]="field.id"
               [name]="field.id"
-              [value]="getFieldValue(field.id)"
+              [value]="getFieldValue()"
               [placeholder]="field.placeholder || ''"
               [required]="field.required"
-              (input)="onFieldChange(field.id, $event)"
+              (input)="onFieldChange($event)"
               class="field-input"
-              [class.field-input--error]="getFieldError(field.id)"
+              [class.field-input--error]="getFieldError()"
             />
           }
           @case ('password') {
@@ -58,24 +58,24 @@
               type="password"
               [id]="field.id"
               [name]="field.id"
-              [value]="getFieldValue(field.id)"
+              [value]="getFieldValue()"
               [placeholder]="field.placeholder || ''"
               [required]="field.required"
-              (input)="onFieldChange(field.id, $event)"
+              (input)="onFieldChange($event)"
               class="field-input"
-              [class.field-input--error]="getFieldError(field.id)"
+              [class.field-input--error]="getFieldError()"
             />
           }
           @case ('textarea') {
             <textarea
               [id]="field.id"
               [name]="field.id"
-              [value]="getFieldValue(field.id)"
+              [value]="getFieldValue()"
               [placeholder]="field.placeholder || ''"
               [required]="field.required"
-              (input)="onFieldChange(field.id, $event)"
+              (input)="onFieldChange($event)"
               class="field-textarea"
-              [class.field-textarea--error]="getFieldError(field.id)"
+              [class.field-textarea--error]="getFieldError()"
               rows="4"
             ></textarea>
           }
@@ -83,11 +83,11 @@
             <select
               [id]="field.id"
               [name]="field.id"
-              [value]="getFieldValue(field.id)"
+              [value]="getFieldValue()"
               [required]="field.required"
-              (change)="onFieldChange(field.id, $event)"
+              (change)="onFieldChange($event)"
               class="field-select"
-              [class.field-select--error]="getFieldError(field.id)"
+              [class.field-select--error]="getFieldError()"
             >
               <option value="">Select {{ field.label.toLowerCase() }}</option>
               @for (option of field.options; track option.value) {
@@ -97,29 +97,29 @@
           }
         }
 
-        @if (getFieldError(field.id)) {
+        @if (getFieldError()) {
           <div class="field-error">
-            {{ getFieldError(field.id) }}
+            {{ getFieldError() }}
           </div>
         }
       </div>
-    }
 
-    <div class="fields-outlet__actions">
-      <button
-        type="submit"
-        class="btn btn--primary"
-        [disabled]="!isFormValid()"
-      >
-        Submit
-      </button>
-      <button
-        type="button"
-        class="btn btn--secondary"
-        (click)="resetForm()"
-      >
-        Reset
-      </button>
-    </div>
-  </form>
+      <div class="fields-outlet__actions">
+        <button
+          type="submit"
+          class="btn btn--primary"
+          [disabled]="!isFormValid()"
+        >
+          Submit
+        </button>
+        <button
+          type="button"
+          class="btn btn--secondary"
+          (click)="resetForm()"
+        >
+          Reset
+        </button>
+      </div>
+    </form>
+  }
 </div>

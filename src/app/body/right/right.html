@@ -1,6 +1,17 @@
 <div class="section-content">
   <h2>Form Fields (Right Section)</h2>
 
+  <!-- Demo Fields Outlet Component (Single Field) -->
+  <div class="demo-section">
+    <h3>Single Field Demo - Updated Component</h3>
+    <app-fields-outlet
+      [title]="'Single Field Demo'"
+      [field]="demoField"
+      (formSubmit)="onDemoFieldSubmit($event)"
+      (fieldChange)="onDemoFieldChange($event)">
+    </app-fields-outlet>
+  </div>
+
   <!-- Loading State -->
   <div *ngIf="loading" class="loading">
     <p>Loading form fields...</p>

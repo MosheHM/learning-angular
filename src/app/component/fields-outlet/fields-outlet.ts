@@ -27,71 +27,67 @@ export interface FieldValue {
   styleUrls: ['./fields-outlet.scss']
 })
 export class FieldsOutletComponent {
-  @Input() fields: FieldConfig[] = [];
+  @Input() field: FieldConfig | null = null;
   @Input() title?: string = '';
-  @Output() formSubmit = new EventEmitter<FieldValue>();
-  @Output() fieldChange = new EventEmitter<{ fieldId: string; value: any }>();
+  @Output() formSubmit = new EventEmitter<any>();
+  @Output() fieldChange = new EventEmitter<any>();
 
-  // Signal for form values
-  private formValues = signal<FieldValue>({});
+  // Signal for single field value
+  private fieldValue = signal<any>('');
 
   // Check if form is valid
   isFormValid(): boolean {
-    return this.fields.every(field => {
-      const value = this.getFieldValue(field.id);
-      // Required fields must have a value
-      if (field.required && (!value || value === '')) {
-        return false;
-      }
-      // If field has a value, it must be valid
-      if (value && value !== '') {
-        return this.isFieldValid(field.id);
-      }
-      return true;
-    });
+    if (!this.field) return false;
+    
+    const value = this.getFieldValue();
+    // Required fields must have a value
+    if (this.field.required && (!value || value === '')) {
+      return false;
+    }
+    // If field has a value, it must be valid
+    if (value && value !== '') {
+      return this.isFieldValid();
+    }
+    return true;
   }
 
-  // Computed signal for touched fields
-  private touchedFields = signal<Set<string>>(new Set());
+  // Computed signal for touched field
+  private fieldTouched = signal<boolean>(false);
 
   // Get field value
-  getFieldValue(fieldId: string): any {
-    return this.formValues()[fieldId] || '';
+  getFieldValue(): any {
+    return this.fieldValue() || '';
   }
 
   // Set field value
-  setFieldValue(fieldId: string, value: any): void {
-    this.formValues.update(values => ({
-      ...values,
-      [fieldId]: value
-    }));
+  setFieldValue(value: any): void {
+    this.fieldValue.set(value);
 
     // Mark field as touched
-    this.touchedFields.update(touched => new Set([...touched, fieldId]));
+    this.fieldTouched.set(true);
 
     // Emit field change event
-    this.fieldChange.emit({ fieldId, value });
+    this.fieldChange.emit(value);
   }
 
   // Check if field is valid
-  isFieldValid(fieldId: string): boolean {
-    const field = this.fields.find(f => f.id === fieldId);
-    if (!field) return true;
+  isFieldValid(): boolean {
+    if (!this.field) return true;
 
-    const value = this.getFieldValue(fieldId);
+    const value = this.getFieldValue();
 
     // Required field validation
-    if (field.required && (!value || value === '')) {
+    if (this.field.required && (!value || value === '')) {
       return false;
     }
 
     // Skip validation if field is not required and empty
-    if (!field.required && (!value || value === '')) {
+    if (!this.field.required && (!value || value === '')) {
       return true;
     }
 
     // Type-specific validation
-    if (field.type === 'email' && value) {
+    if (this.field.type === 'email' && value) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(value)) {
         return false;
@@ -99,25 +95,25 @@ export class FieldsOutletComponent {
     }
 
     // Custom validation
-    if (field.validation?.customValidator && value) {
-      const customError = field.validation.customValidator(value);
+    if (this.field.validation?.customValidator && value) {
+      const customError = this.field.validation.customValidator(value);
       if (customError) {
         return false;
       }
     }
 
     // Length validation
-    if (field.validation?.minLength && value && value.length < field.validation.minLength) {
+    if (this.field.validation?.minLength && value && value.length < this.field.validation.minLength) {
       return false;
     }
 
-    if (field.validation?.maxLength && value && value.length > field.validation.maxLength) {
+    if (this.field.validation?.maxLength && value && value.length > this.field.validation.maxLength) {
       return false;
     }
 
     // Pattern validation
-    if (field.validation?.pattern && value) {
-      const regex = new RegExp(field.validation.pattern);
+    if (this.field.validation?.pattern && value) {
+      const regex = new RegExp(this.field.validation.pattern);
       if (!regex.test(value)) {
         return false;
       }
@@ -127,23 +123,22 @@ export class FieldsOutletComponent {
   }
 
   // Get field error message
-  getFieldError(fieldId: string): string | null {
-    const field = this.fields.find(f => f.id === fieldId);
-    if (!field) return null;
+  getFieldError(): string | null {
+    if (!this.field) return null;
 
-    const value = this.getFieldValue(fieldId);
-    const isTouched = this.touchedFields().has(fieldId);
+    const value = this.getFieldValue();
+    const isTouched = this.fieldTouched();
 
     // Show errors for required fields even if not touched
-    if (field.required && (!value || value === '')) {
-      return `${field.label} is required`;
+    if (this.field.required && (!value || value === '')) {
+      return `${this.field.label} is required`;
     }
 
     // Only show other errors for touched fields
     if (!isTouched) return null;
 
     // Type-specific validation
-    if (field.type === 'email' && value) {
+    if (this.field.type === 'email' && value) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(value)) {
         return 'Please enter a valid email address';
@@ -151,58 +146,56 @@ export class FieldsOutletComponent {
     }
 
     // Custom validation
-    if (field.validation?.customValidator && value) {
-      const customError = field.validation.customValidator(value);
+    if (this.field.validation?.customValidator && value) {
+      const customError = this.field.validation.customValidator(value);
       if (customError) {
         return customError;
       }
     }
 
     // Length validation
-    if (field.validation?.minLength && value && value.length < field.validation.minLength) {
-      return `${field.label} must be at least ${field.validation.minLength} characters`;
+    if (this.field.validation?.minLength && value && value.length < this.field.validation.minLength) {
+      return `${this.field.label} must be at least ${this.field.validation.minLength} characters`;
     }
 
-    if (field.validation?.maxLength && value && value.length > field.validation.maxLength) {
-      return `${field.label} must be no more than ${field.validation.maxLength} characters`;
+    if (this.field.validation?.maxLength && value && value.length > this.field.validation.maxLength) {
+      return `${this.field.label} must be no more than ${this.field.validation.maxLength} characters`;
     }
 
     // Pattern validation
-    if (field.validation?.pattern && value) {
-      return `Please enter a valid ${field.label.toLowerCase()}`;
+    if (this.field.validation?.pattern && value) {
+      return `Please enter a valid ${this.field.label.toLowerCase()}`;
     }
 
     return null;
   }
 
   // Handle input changes
-  onFieldChange(fieldId: string, event: Event): void {
+  onFieldChange(event: Event): void {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
-    this.setFieldValue(fieldId, target.value);
+    this.setFieldValue(target.value);
   }
 
   // Handle form submission
   onSubmit(event: Event): void {
     event.preventDefault();
 
-    // Mark all fields as touched for validation display
-    this.touchedFields.update(touched =>
-      new Set([...touched, ...this.fields.map(f => f.id)])
-    );
+    // Mark field as touched for validation display
+    this.fieldTouched.set(true);
 
     if (this.isFormValid()) {
-      this.formSubmit.emit(this.formValues());
+      this.formSubmit.emit(this.fieldValue());
     }
   }
 
   // Mark field as touched (for testing purposes)
-  markFieldAsTouched(fieldId: string): void {
-    this.touchedFields.update(touched => new Set([...touched, fieldId]));
+  markFieldAsTouched(): void {
+    this.fieldTouched.set(true);
   }
 
   // Reset form
   resetForm(): void {
-    this.formValues.set({});
-    this.touchedFields.set(new Set());
+    this.fieldValue.set('');
+    this.fieldTouched.set(false);
   }
 }
