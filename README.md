@@ -1,59 +1,168 @@
-# LearningAngular
+# Learning Angular v20 🚀
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.2.
+A comprehensive Angular v20 learning repository with modern development patterns, complete examples, and best practices.
 
-## Development server
+## 📚 Complete Documentation Suite
 
-To start a local development server, run:
+This repository includes comprehensive Angular v20 agent instructions and learning materials:
 
+### 📖 Core Guides
+- **[📋 QUICK_START.md](./QUICK_START.md)** - Get up and running with Angular v20 in 5 minutes
+- **[📘 ANGULAR_V20_GUIDE.md](./ANGULAR_V20_GUIDE.md)** - Complete Angular v20 guide with all features and best practices
+- **[🛠️ DEVELOPMENT_WORKFLOW.md](./DEVELOPMENT_WORKFLOW.md)** - Professional development workflow and tooling setup
+- **[💡 PRACTICAL_EXAMPLES.md](./PRACTICAL_EXAMPLES.md)** - Real-world component and service examples
+
+### 🎯 What You'll Learn
+- ✅ Angular v20 standalone components and new features
+- ✅ Signals-based reactive programming
+- ✅ Modern project structure and organization
+- ✅ Advanced component patterns and best practices
+- ✅ Professional testing strategies
+- ✅ Build optimization and deployment
+- ✅ Complete development workflow setup
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18.19.0+ (v20.x recommended)
+- npm 9.x or later
+
+### Get Started
 ```bash
-ng serve
+# Clone this repository
+git clone https://github.com/MosheHM/learning-angular.git
+cd learning-angular
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+
+# Open http://localhost:4200 in your browser
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+### Available Commands
 ```bash
-ng generate component component-name
+npm start              # Start development server
+npm run build          # Build for production
+npm test               # Run unit tests
+npm run test:ci        # Run tests in CI mode
+npm run lint           # Run linting
+npm run format         # Format code
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🏗️ Project Structure
 
-```bash
-ng generate --help
+This project demonstrates modern Angular v20 architecture:
+
+```
+src/app/
+├── components/        # Reusable UI components
+├── services/         # Business logic and data services
+├── models/           # TypeScript interfaces and types
+├── guards/           # Route protection
+├── pipes/            # Custom data transformation
+├── app.ts           # Root component (standalone)
+├── app.config.ts    # Application configuration
+└── app.routes.ts    # Route definitions
 ```
 
-## Building
+## ✨ Key Features Demonstrated
 
-To build the project run:
+### 🔥 Angular v20 Features
+- **Standalone Components** - No NgModules required
+- **Signals** - Reactive state management
+- **New Control Flow** - @if, @for, @switch syntax
+- **Enhanced Application Builder** - Improved build performance
+- **Modern Testing** - Updated testing utilities
+
+### 🛠️ Development Features
+- TypeScript 5.9+ with strict mode
+- SCSS styling with modern patterns
+- Comprehensive testing setup
+- ESLint and Prettier configuration
+- Professional development workflow
+
+### 📱 Example Components
+- User profile with signal-based state
+- Data table with sorting and pagination
+- Shopping cart service with persistence
+- Form validation with reactive forms
+- HTTP interceptors and error handling
+
+## 📖 Learning Path
+
+### 1. **Start Here** 👈
+Read [QUICK_START.md](./QUICK_START.md) to get running immediately
+
+### 2. **Core Concepts**
+Study [ANGULAR_V20_GUIDE.md](./ANGULAR_V20_GUIDE.md) for comprehensive coverage
+
+### 3. **Practical Application**
+Explore [PRACTICAL_EXAMPLES.md](./PRACTICAL_EXAMPLES.md) for real-world patterns
+
+### 4. **Professional Setup**
+Follow [DEVELOPMENT_WORKFLOW.md](./DEVELOPMENT_WORKFLOW.md) for production-ready workflow
+
+## 🧪 Running Tests
 
 ```bash
-ng build
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:ci
+
+# Run tests in watch mode
+npm run test:watch
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🔧 Development Tools
 
-## Running unit tests
+### Recommended VS Code Extensions
+- Angular Language Service
+- TypeScript Hero
+- Prettier
+- ESLint
+- Auto Rename Tag
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Browser Extensions
+- Angular DevTools
+- Redux DevTools (for NgRx if used)
 
-```bash
-ng test
-```
+## 📚 Additional Resources
 
-## Running end-to-end tests
+### Official Documentation
+- [Angular v20 Documentation](https://angular.dev)
+- [Angular CLI Reference](https://angular.dev/tools/cli)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 
-For end-to-end (e2e) testing, run:
+### Community
+- [Angular Blog](https://blog.angular.io/)
+- [Angular Reddit](https://www.reddit.com/r/Angular2/)
+- [Angular Discord](https://discord.gg/angular)
 
-```bash
-ng e2e
-```
+## 🤝 Contributing
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+This is a learning repository. Feel free to:
+1. Fork the repository
+2. Create a feature branch
+3. Add your examples or improvements
+4. Submit a pull request
 
-## Additional Resources
+## 📄 License
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+- Angular team for the amazing framework
+- Community contributors and educators
+- Open source libraries and tools used
+
+---
+
+**Happy coding with Angular v20! 🎉**
+
+For questions or suggestions, please open an issue or start a discussion.
