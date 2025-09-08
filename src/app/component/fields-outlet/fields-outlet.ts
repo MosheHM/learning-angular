@@ -36,7 +36,6 @@ export class FieldsOutletComponent {
   @Output() formSubmit = new EventEmitter<any>();
   @Output() fieldChange = new EventEmitter<any>();
 
-  // Signal for single field value
   private fieldValue = signal<any>('');
 
   // Helper methods for accessing field properties with backward compatibility
