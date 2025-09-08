@@ -1,6 +1,32 @@
 <div class="section-content">
-  <h2>I Want</h2>
-  <div class="section-placeholder">
-    <p>Content for what you desire or need</p>
+  <h2>Form Fields (Right Section)</h2>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <p>Loading form fields...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error">
+    <p>Error: {{ error }}</p>
+    <button (click)="refreshData()">Retry</button>
+  </div>
+
+  <!-- Data Display -->
+  <div *ngIf="!loading && !error" class="form-fields-list">
+    <button (click)="refreshData()" class="refresh-btn">Refresh Data</button>
+
+    <div class="field-card" *ngFor="let field of formFields$ | async">
+      <h3>{{ field.label }}</h3>
+      <div class="field-details">
+        <p><strong>Name:</strong> {{ field.name }}</p>
+        <p><strong>Type:</strong> {{ field.input.dataType }}</p>
+        <p><strong>Section:</strong> {{ field.layout.sectionId }}</p>
+        <p><strong>Order:</strong> {{ field.layout.order }}</p>
+        <p><strong>Required:</strong> {{ field.input.validation.required ? 'Yes' : 'No' }}</p>
+        <p><strong>Max Size:</strong> {{ field.input.validation.maxSize }}</p>
+        <p><strong>Tooltip:</strong> {{ field.toolTipText }}</p>
+      </div>
+    </div>
   </div>
 </div>
