@@ -1,12 +1,49 @@
 <div class="section-content">
   <h2>Form Fields (Right Section)</h2>
 
-  <!-- Demo Fields Outlet Component (Single Field) -->
+  <!-- Demo Fields Outlet Component (Programmatic Rendering) -->
   <div class="demo-section">
-    <h3>Single Field Demo - Updated Component</h3>
+    <h3>Programmatic Field Rendering Demo</h3>
+    <p>This demonstrates programmatic rendering of field components using ViewContainerRef</p>
+    
+    <!-- Field Type Selector -->
+    <div class="field-type-selector">
+      <button 
+        (click)="switchFieldType('text')" 
+        [class.active]="currentFieldType === 'text'"
+        class="field-btn">
+        Text Field
+      </button>
+      <button 
+        (click)="switchFieldType('number')" 
+        [class.active]="currentFieldType === 'number'"
+        class="field-btn">
+        Number Field
+      </button>
+      <button 
+        (click)="switchFieldType('email')" 
+        [class.active]="currentFieldType === 'email'"
+        class="field-btn">
+        Email Field
+      </button>
+      <button 
+        (click)="switchFieldType('tel')" 
+        [class.active]="currentFieldType === 'tel'"
+        class="field-btn">
+        Tel Field
+      </button>
+    </div>
+
+    <!-- Current Field Type Display -->
+    <div class="current-field-info">
+      <p><strong>Current Field Type:</strong> {{ currentFieldType }}</p>
+      <p><strong>Component:</strong> {{ currentDemoField.label }}</p>
+    </div>
+
+    <!-- Fields Outlet with Programmatic Rendering -->
     <app-fields-outlet
-      [title]="'Single Field Demo'"
-      [field]="demoField"
+      [title]="'Dynamic Field Demo (Programmatic Rendering)'"
+      [field]="currentDemoField"
       (formSubmit)="onDemoFieldSubmit($event)"
       (fieldChange)="onDemoFieldChange($event)">
     </app-fields-outlet>

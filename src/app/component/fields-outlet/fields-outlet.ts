@@ -1,11 +1,17 @@
-import { Component, Input, Output, EventEmitter, signal, computed } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewContainerRef, ViewChild, OnChanges, SimpleChanges, ComponentRef, inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FieldLogicService } from '../../services/field-logic.service';
+import { TextFieldComponent } from '../text-field/text-field.component';
+import { NumberFieldComponent } from '../number-field/number-field.component';
+import { EmailFieldComponent } from '../email-field/email-field.component';
+import { TelFieldComponent } from '../tel-field/tel-field.component';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 
 export interface FieldConfig {
   name: string;
   label: string;
   input: {
-    dataType: 'text' | 'number' | 'email' | 'password' | 'textarea' | 'select';
+    dataType: 'text' | 'number' | 'email' | 'tel' | 'password' | 'textarea' | 'select';
     validation?: {
       required?: boolean;
       maxSize?: number;
@@ -27,216 +33,129 @@ export interface FieldValue {
 @Component({
   selector: 'app-fields-outlet',
   imports: [CommonModule],
-  templateUrl: './fields-outlet.html',
+  template: `
+    <div class="fields-outlet">
+      @if (title) {
+        <h2 class="fields-outlet__title">{{ title }}</h2>
+      }
+
+      @if (field) {
+        <form class="fields-outlet__form" (ngSubmit)="onSubmit($event)">
+          <div #fieldContainer></div>
+
+          <div class="fields-outlet__actions">
+            <button
+              type="submit"
+              class="btn btn--primary"
+              [disabled]="!isFormValid()"
+            >
+              Submit
+            </button>
+            <button
+              type="button"
+              class="btn btn--secondary"
+              (click)="resetForm()"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  `,
   styleUrls: ['./fields-outlet.scss']
 })
-export class FieldsOutletComponent {
+export class FieldsOutletComponent implements OnChanges, AfterViewInit {
   @Input() field: FieldConfig | null = null;
   @Input() title?: string = '';
   @Output() formSubmit = new EventEmitter<any>();
   @Output() fieldChange = new EventEmitter<any>();
 
-  private fieldValue = signal<any>('');
+  @ViewChild('fieldContainer', { read: ViewContainerRef }) fieldContainer!: ViewContainerRef;
 
-  // Helper methods for accessing field properties with backward compatibility
-  private getFieldName(): string {
-    return this.field?.name || '';
+  private fieldLogicService = inject(FieldLogicService);
+  private currentFieldComponent: ComponentRef<BaseFieldComponent> | null = null;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['field'] && this.fieldContainer) {
+      this.renderField();
+    }
   }
 
-  private getFieldType(): string {
-    return this.field?.input?.dataType || 'text';
+  ngAfterViewInit(): void {
+    this.renderField();
   }
 
-  private isFieldRequired(): boolean {
-    return this.field?.input?.validation?.required || false;
+  private renderField(): void {
+    // Clear previous component
+    if (this.currentFieldComponent) {
+      this.currentFieldComponent.destroy();
+      this.currentFieldComponent = null;
+    }
+
+    if (!this.field || !this.fieldContainer) return;
+
+    // Get component type based on field type
+    const componentType = this.getComponentType(this.field.input.dataType);
+    if (!componentType) return;
+
+    // Create component programmatically
+    this.currentFieldComponent = this.fieldContainer.createComponent(componentType);
+    
+    // Set inputs
+    this.currentFieldComponent.instance.field = this.field;
+    
+    // Subscribe to field changes
+    this.currentFieldComponent.instance.fieldChange.subscribe((value: any) => {
+      this.fieldChange.emit(value);
+    });
   }
 
-  private getFieldValidation() {
-    return this.field?.input?.validation || {};
-  }
-
-  // Public methods for template access
-  getFieldId(): string {
-    return this.getFieldName();
-  }
-
-  getFieldTypeForTemplate(): string {
-    return this.getFieldType();
-  }
-
-  isRequiredForTemplate(): boolean {
-    return this.isFieldRequired();
-  }
-
-  getPlaceholderText(): string {
-    return this.field?.placeholder || this.field?.toolTipText || '';
+  private getComponentType(dataType: string): any {
+    switch (dataType) {
+      case 'text':
+        return TextFieldComponent;
+      case 'number':
+        return NumberFieldComponent;
+      case 'email':
+        return EmailFieldComponent;
+      case 'tel':
+        return TelFieldComponent;
+      default:
+        return TextFieldComponent; // Fallback to text field
+    }
   }
 
   // Check if form is valid
   isFormValid(): boolean {
-    if (!this.field) return false;
-    
-    const value = this.getFieldValue();
-    // Required fields must have a value
-    if (this.isFieldRequired() && (!value || value === '')) {
-      return false;
-    }
-    // If field has a value, it must be valid
-    if (value && value !== '') {
-      return this.isFieldValid();
-    }
-    return true;
+    if (!this.field || !this.currentFieldComponent) return false;
+    return this.currentFieldComponent.instance.isFieldValid();
   }
-
-  // Computed signal for touched field
-  private fieldTouched = signal<boolean>(false);
 
   // Get field value
   getFieldValue(): any {
-    return this.fieldValue() || '';
-  }
-
-  // Set field value
-  setFieldValue(value: any): void {
-    this.fieldValue.set(value);
-
-    // Mark field as touched
-    this.fieldTouched.set(true);
-
-    // Emit field change event
-    this.fieldChange.emit(value);
-  }
-
-  // Check if field is valid
-  isFieldValid(): boolean {
-    if (!this.field) return true;
-
-    const value = this.getFieldValue();
-    const validation = this.getFieldValidation();
-    const fieldType = this.getFieldType();
-
-    // Required field validation
-    if (this.isFieldRequired() && (!value || value === '')) {
-      return false;
-    }
-
-    // Skip validation if field is not required and empty
-    if (!this.isFieldRequired() && (!value || value === '')) {
-      return true;
-    }
-
-    // Type-specific validation
-    if (fieldType === 'email' && value) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) {
-        return false;
-      }
-    }
-
-    // Custom validation
-    if (validation.customValidator && value) {
-      const customError = validation.customValidator(value);
-      if (customError) {
-        return false;
-      }
-    }
-
-    // Length validation
-    if (validation.minLength && value && value.length < validation.minLength) {
-      return false;
-    }
-
-    if (validation.maxSize && value && value.length > validation.maxSize) {
-      return false;
-    }
-
-    // Pattern validation
-    if (validation.pattern && value) {
-      const regex = new RegExp(validation.pattern);
-      if (!regex.test(value)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  // Get field error message
-  getFieldError(): string | null {
-    if (!this.field) return null;
-
-    const value = this.getFieldValue();
-    const isTouched = this.fieldTouched();
-    const validation = this.getFieldValidation();
-    const fieldType = this.getFieldType();
-
-    // Show errors for required fields even if not touched
-    if (this.isFieldRequired() && (!value || value === '')) {
-      return `${this.field.label} is required`;
-    }
-
-    // Only show other errors for touched fields
-    if (!isTouched) return null;
-
-    // Type-specific validation
-    if (fieldType === 'email' && value) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) {
-        return 'Please enter a valid email address';
-      }
-    }
-
-    // Custom validation
-    if (validation.customValidator && value) {
-      const customError = validation.customValidator(value);
-      if (customError) {
-        return customError;
-      }
-    }
-
-    // Length validation
-    if (validation.minLength && value && value.length < validation.minLength) {
-      return `${this.field.label} must be at least ${validation.minLength} characters`;
-    }
-
-    if (validation.maxSize && value && value.length > validation.maxSize) {
-      return `${this.field.label} must be no more than ${validation.maxSize} characters`;
-    }
-
-    // Pattern validation
-    if (validation.pattern && value) {
-      return `Please enter a valid ${this.field.label.toLowerCase()}`;
-    }
-
-    return null;
-  }
-
-  // Handle input changes
-  onFieldChange(event: Event): void {
-    const target = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
-    this.setFieldValue(target.value);
+    if (!this.currentFieldComponent) return '';
+    return this.currentFieldComponent.instance.getFieldValue();
   }
 
   // Handle form submission
   onSubmit(event: Event): void {
     event.preventDefault();
 
+    if (!this.currentFieldComponent) return;
+
     // Mark field as touched for validation display
-    this.fieldTouched.set(true);
+    this.currentFieldComponent.instance.markFieldAsTouched();
 
     if (this.isFormValid()) {
-      this.formSubmit.emit(this.fieldValue());
+      this.formSubmit.emit(this.getFieldValue());
     }
-  }
-
-  // Mark field as touched (for testing purposes)
-  markFieldAsTouched(): void {
-    this.fieldTouched.set(true);
   }
 
   // Reset form
   resetForm(): void {
-    this.fieldValue.set('');
-    this.fieldTouched.set(false);
+    if (this.currentFieldComponent) {
+      this.currentFieldComponent.instance.resetField();
+    }
   }
 }
