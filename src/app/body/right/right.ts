@@ -15,8 +15,34 @@ export class Right implements OnInit {
   loading = false;
   error: string | null = null;
 
-  // Demo field for the fields-outlet component
-  demoField: FieldConfig = {
+  // Demo fields for the four new field types
+  textField: FieldConfig = {
+    name: 'demo-text',
+    label: 'Full Name',
+    input: {
+      dataType: 'text',
+      validation: {
+        required: true,
+        minLength: 2,
+        maxSize: 50
+      }
+    },
+    toolTipText: 'Enter your full name'
+  };
+
+  numberField: FieldConfig = {
+    name: 'demo-number',
+    label: 'Age',
+    input: {
+      dataType: 'number',
+      validation: {
+        required: true
+      }
+    },
+    toolTipText: 'Enter your age'
+  };
+
+  emailField: FieldConfig = {
     name: 'demo-email',
     label: 'Email Address',
     input: {
@@ -29,6 +55,21 @@ export class Right implements OnInit {
     },
     toolTipText: 'Enter your email address'
   };
+
+  telField: FieldConfig = {
+    name: 'demo-tel',
+    label: 'Phone Number',
+    input: {
+      dataType: 'tel',
+      validation: {
+        required: true
+      }
+    },
+    toolTipText: 'Enter your phone number'
+  };
+
+  currentDemoField: FieldConfig = this.textField;
+  currentFieldType: string = 'text';
 
   constructor(private dataService: DataService) {}
 
@@ -62,10 +103,31 @@ export class Right implements OnInit {
   // Handle demo field events
   onDemoFieldSubmit(value: any): void {
     console.log('Demo field submitted:', value);
-    alert(`Form submitted with value: ${value}`);
+    alert(`${this.currentDemoField.label} submitted with value: ${value}`);
   }
 
   onDemoFieldChange(value: any): void {
     console.log('Demo field changed:', value);
+  }
+
+  // Switch between different field types
+  switchFieldType(type: string): void {
+    this.currentFieldType = type;
+    switch (type) {
+      case 'text':
+        this.currentDemoField = this.textField;
+        break;
+      case 'number':
+        this.currentDemoField = this.numberField;
+        break;
+      case 'email':
+        this.currentDemoField = this.emailField;
+        break;
+      case 'tel':
+        this.currentDemoField = this.telField;
+        break;
+      default:
+        this.currentDemoField = this.textField;
+    }
   }
 }
