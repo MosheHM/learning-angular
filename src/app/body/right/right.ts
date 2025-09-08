@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { map, Observable } from 'rxjs';
@@ -11,65 +11,9 @@ import { FieldsOutletComponent, FieldConfig } from '../../component/fields-outle
   styleUrl: './right.scss'
 })
 export class Right implements OnInit {
-  formFields$!: Observable<any[]>;
+  formFields$!: Observable<FieldConfig[]>;
   loading = false;
   error: string | null = null;
-
-  // Demo fields for the four new field types
-  textField: FieldConfig = {
-    name: 'demo-text',
-    label: 'Full Name',
-    input: {
-      dataType: 'text',
-      validation: {
-        required: true,
-        minLength: 2,
-        maxSize: 50
-      }
-    },
-    toolTipText: 'Enter your full name'
-  };
-
-  numberField: FieldConfig = {
-    name: 'demo-number',
-    label: 'Age',
-    input: {
-      dataType: 'number',
-      validation: {
-        required: true
-      }
-    },
-    toolTipText: 'Enter your age'
-  };
-
-  emailField: FieldConfig = {
-    name: 'demo-email',
-    label: 'Email Address',
-    input: {
-      dataType: 'email',
-      validation: {
-        required: true,
-        minLength: 5,
-        maxSize: 100
-      }
-    },
-    toolTipText: 'Enter your email address'
-  };
-
-  telField: FieldConfig = {
-    name: 'demo-tel',
-    label: 'Phone Number',
-    input: {
-      dataType: 'tel',
-      validation: {
-        required: true
-      }
-    },
-    toolTipText: 'Enter your phone number'
-  };
-
-  currentDemoField: FieldConfig = this.textField;
-  currentFieldType: string = 'text';
 
   constructor(private dataService: DataService) {}
 
@@ -81,12 +25,11 @@ export class Right implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.formFields$ = this.dataService.getFormFields()
+    this.formFields$ = this.dataService.getFormFields<FieldConfig>()
       .pipe(map(fields => fields.filter(field => field.layout.sectionId === "rightSection")
         .sort((a, b) => a.layout.order - b.layout.order)
       ));
 
-    // Subscribe only once to handle loading states
     this.formFields$.subscribe({
       next: () => this.loading = false,
       error: (err) => {
@@ -100,34 +43,13 @@ export class Right implements OnInit {
     this.loadFormFields();
   }
 
-  // Handle demo field events
-  onDemoFieldSubmit(value: any): void {
+  onDemoFieldSubmit(value: FieldConfig): void {
     console.log('Demo field submitted:', value);
-    alert(`${this.currentDemoField.label} submitted with value: ${value}`);
+    alert(`${value.label} submitted with value: ${value}`);
   }
 
-  onDemoFieldChange(value: any): void {
+  onDemoFieldChange(value: FieldConfig): void {
     console.log('Demo field changed:', value);
   }
 
-  // Switch between different field types
-  switchFieldType(type: string): void {
-    this.currentFieldType = type;
-    switch (type) {
-      case 'text':
-        this.currentDemoField = this.textField;
-        break;
-      case 'number':
-        this.currentDemoField = this.numberField;
-        break;
-      case 'email':
-        this.currentDemoField = this.emailField;
-        break;
-      case 'tel':
-        this.currentDemoField = this.telField;
-        break;
-      default:
-        this.currentDemoField = this.textField;
-    }
-  }
 }
