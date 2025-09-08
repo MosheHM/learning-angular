@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { map, Observable } from 'rxjs';
+import { FieldsOutletComponent, FieldConfig } from '../../component/fields-outlet/fields-outlet';
 
 @Component({
   selector: 'app-right',
-  imports: [CommonModule],
+  imports: [CommonModule, FieldsOutletComponent],
   templateUrl: './right.html',
   styleUrl: './right.scss'
 })
@@ -14,11 +15,25 @@ export class Right implements OnInit {
   loading = false;
   error: string | null = null;
 
+  // Demo field for the fields-outlet component
+  demoField: FieldConfig = {
+    id: 'demo-email',
+    type: 'email',
+    label: 'Email Address',
+    placeholder: 'Enter your email address',
+    required: true,
+    validation: {
+      minLength: 5,
+      maxLength: 100
+    }
+  };
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     this.loadFormFields();
   }
+  
   loadFormFields(): void {
     this.loading = true;
     this.error = null;
@@ -40,5 +55,15 @@ export class Right implements OnInit {
 
   refreshData(): void {
     this.loadFormFields();
+  }
+
+  // Handle demo field events
+  onDemoFieldSubmit(value: any): void {
+    console.log('Demo field submitted:', value);
+    alert(`Form submitted with value: ${value}`);
+  }
+
+  onDemoFieldChange(value: any): void {
+    console.log('Demo field changed:', value);
   }
 }
