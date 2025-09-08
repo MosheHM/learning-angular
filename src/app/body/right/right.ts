@@ -17,15 +17,17 @@ export class Right implements OnInit {
 
   // Demo field for the fields-outlet component
   demoField: FieldConfig = {
-    id: 'demo-email',
-    type: 'email',
+    name: 'demo-email',
     label: 'Email Address',
-    placeholder: 'Enter your email address',
-    required: true,
-    validation: {
-      minLength: 5,
-      maxLength: 100
-    }
+    input: {
+      dataType: 'email',
+      validation: {
+        required: true,
+        minLength: 5,
+        maxSize: 100
+      }
+    },
+    toolTipText: 'Enter your email address'
   };
 
   constructor(private dataService: DataService) {}
