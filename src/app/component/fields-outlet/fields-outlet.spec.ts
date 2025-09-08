@@ -25,11 +25,15 @@ describe('FieldsOutletComponent', () => {
   describe('Field Configuration', () => {
     it('should handle text field configuration', () => {
       const field: FieldConfig = {
-        id: 'name',
-        type: 'text',
+        name: 'name',
         label: 'Full Name',
-        placeholder: 'Enter your name',
-        required: true
+        input: {
+          dataType: 'text',
+          validation: {
+            required: true
+          }
+        },
+        toolTipText: 'Enter your name'
       };
 
       component.field = field;
@@ -39,26 +43,45 @@ describe('FieldsOutletComponent', () => {
     });
 
     it('should handle different field types', () => {
-      const textField: FieldConfig = { id: 'name', type: 'text', label: 'Name', required: true };
+      const textField: FieldConfig = { 
+        name: 'name', 
+        label: 'Name', 
+        input: { 
+          dataType: 'text', 
+          validation: { required: true } 
+        } 
+      };
       component.field = textField;
       fixture.detectChanges();
-      expect(component.field.type).toBe('text');
+      expect(component.field.input.dataType).toBe('text');
 
-      const emailField: FieldConfig = { id: 'email', type: 'email', label: 'Email', required: true };
+      const emailField: FieldConfig = { 
+        name: 'email', 
+        label: 'Email', 
+        input: { 
+          dataType: 'email', 
+          validation: { required: true } 
+        } 
+      };
       component.field = emailField;
       fixture.detectChanges();
-      expect(component.field.type).toBe('email');
+      expect(component.field.input.dataType).toBe('email');
     });
   });
 
   describe('Form Validation', () => {
     beforeEach(() => {
       component.field = {
-        id: 'name',
-        type: 'text',
+        name: 'name',
         label: 'Name',
-        required: true,
-        validation: { minLength: 2, maxLength: 50 }
+        input: {
+          dataType: 'text',
+          validation: {
+            required: true,
+            minLength: 2,
+            maxSize: 50
+          }
+        }
       };
       fixture.detectChanges();
     });
@@ -75,10 +98,14 @@ describe('FieldsOutletComponent', () => {
 
     it('should validate email format', () => {
       component.field = {
-        id: 'email',
-        type: 'email',
+        name: 'email',
         label: 'Email',
-        required: true
+        input: {
+          dataType: 'email',
+          validation: {
+            required: true
+          }
+        }
       };
       fixture.detectChanges();
 
@@ -116,7 +143,14 @@ describe('FieldsOutletComponent', () => {
 
   describe('Form Interactions', () => {
     beforeEach(() => {
-      component.field = { id: 'name', type: 'text', label: 'Name', required: true };
+      component.field = { 
+        name: 'name', 
+        label: 'Name', 
+        input: { 
+          dataType: 'text', 
+          validation: { required: true } 
+        } 
+      };
       fixture.detectChanges();
     });
 
@@ -169,7 +203,11 @@ describe('FieldsOutletComponent', () => {
   describe('Template Rendering', () => {
     it('should render title when provided', () => {
       component.title = 'Test Form';
-      component.field = { id: 'name', type: 'text', label: 'Name' };
+      component.field = { 
+        name: 'name', 
+        label: 'Name', 
+        input: { dataType: 'text' } 
+      };
       fixture.detectChanges();
 
       const titleElement = fixture.nativeElement.querySelector('.fields-outlet__title');
@@ -177,7 +215,14 @@ describe('FieldsOutletComponent', () => {
     });
 
     it('should render required indicator for required fields', () => {
-      component.field = { id: 'name', type: 'text', label: 'Name', required: true };
+      component.field = { 
+        name: 'name', 
+        label: 'Name', 
+        input: { 
+          dataType: 'text', 
+          validation: { required: true } 
+        } 
+      };
       fixture.detectChanges();
 
       const label = fixture.nativeElement.querySelector('.field-label');
@@ -186,35 +231,55 @@ describe('FieldsOutletComponent', () => {
 
     it('should render different input types correctly', () => {
       // Test text input
-      component.field = { id: 'text', type: 'text', label: 'Text' };
+      component.field = { 
+        name: 'text', 
+        label: 'Text', 
+        input: { dataType: 'text' } 
+      };
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('input[type="text"]')).toBeTruthy();
 
       // Test email input
-      component.field = { id: 'email', type: 'email', label: 'Email' };
+      component.field = { 
+        name: 'email', 
+        label: 'Email', 
+        input: { dataType: 'email' } 
+      };
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('input[type="email"]')).toBeTruthy();
 
       // Test password input
-      component.field = { id: 'password', type: 'password', label: 'Password' };
+      component.field = { 
+        name: 'password', 
+        label: 'Password', 
+        input: { dataType: 'password' } 
+      };
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('input[type="password"]')).toBeTruthy();
 
       // Test number input
-      component.field = { id: 'number', type: 'number', label: 'Number' };
+      component.field = { 
+        name: 'number', 
+        label: 'Number', 
+        input: { dataType: 'number' } 
+      };
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('input[type="number"]')).toBeTruthy();
 
       // Test textarea
-      component.field = { id: 'textarea', type: 'textarea', label: 'Textarea' };
+      component.field = { 
+        name: 'textarea', 
+        label: 'Textarea', 
+        input: { dataType: 'textarea' } 
+      };
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('textarea')).toBeTruthy();
 
       // Test select
       component.field = {
-        id: 'select',
-        type: 'select',
+        name: 'select',
         label: 'Select',
+        input: { dataType: 'select' },
         options: [
           { value: 'option1', label: 'Option 1' },
           { value: 'option2', label: 'Option 2' }
@@ -225,7 +290,14 @@ describe('FieldsOutletComponent', () => {
     });
 
     it('should show error messages for invalid fields', () => {
-      component.field = { id: 'email', type: 'email', label: 'Email', required: true };
+      component.field = { 
+        name: 'email', 
+        label: 'Email', 
+        input: { 
+          dataType: 'email', 
+          validation: { required: true } 
+        } 
+      };
       component.setFieldValue('invalid-email');
       component.markFieldAsTouched();
       fixture.detectChanges();
@@ -236,7 +308,14 @@ describe('FieldsOutletComponent', () => {
     });
 
     it('should disable submit button when form is invalid', () => {
-      component.field = { id: 'name', type: 'text', label: 'Name', required: true };
+      component.field = { 
+        name: 'name', 
+        label: 'Name', 
+        input: { 
+          dataType: 'text', 
+          validation: { required: true } 
+        } 
+      };
       fixture.detectChanges();
 
       const submitButton = fixture.nativeElement.querySelector('button[type="submit"]');

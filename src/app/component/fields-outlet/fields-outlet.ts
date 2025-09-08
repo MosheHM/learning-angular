@@ -2,18 +2,22 @@ import { Component, Input, Output, EventEmitter, signal, computed } from '@angul
 import { CommonModule } from '@angular/common';
 
 export interface FieldConfig {
-  id: string;
-  type: 'text' | 'number' | 'email' | 'password' | 'textarea' | 'select';
+  name: string;
   label: string;
-  placeholder?: string;
-  required?: boolean;
-  options?: { value: string; label: string }[];
-  validation?: {
-    minLength?: number;
-    maxLength?: number;
-    pattern?: string;
-    customValidator?: (value: any) => string | null;
+  input: {
+    dataType: 'text' | 'number' | 'email' | 'password' | 'textarea' | 'select';
+    validation?: {
+      required?: boolean;
+      maxSize?: number;
+      minLength?: number;
+      pattern?: string;
+      customValidator?: (value: any) => string | null;
+    };
   };
+  toolTipText?: string;
+  // Legacy support for backward compatibility
+  placeholder?: string;
+  options?: { value: string; label: string }[];
 }
 
 export interface FieldValue {
@@ -35,13 +39,47 @@ export class FieldsOutletComponent {
   // Signal for single field value
   private fieldValue = signal<any>('');
 
+  // Helper methods for accessing field properties with backward compatibility
+  private getFieldName(): string {
+    return this.field?.name || '';
+  }
+
+  private getFieldType(): string {
+    return this.field?.input?.dataType || 'text';
+  }
+
+  private isFieldRequired(): boolean {
+    return this.field?.input?.validation?.required || false;
+  }
+
+  private getFieldValidation() {
+    return this.field?.input?.validation || {};
+  }
+
+  // Public methods for template access
+  getFieldId(): string {
+    return this.getFieldName();
+  }
+
+  getFieldTypeForTemplate(): string {
+    return this.getFieldType();
+  }
+
+  isRequiredForTemplate(): boolean {
+    return this.isFieldRequired();
+  }
+
+  getPlaceholderText(): string {
+    return this.field?.placeholder || this.field?.toolTipText || '';
+  }
+
   // Check if form is valid
   isFormValid(): boolean {
     if (!this.field) return false;
     
     const value = this.getFieldValue();
     // Required fields must have a value
-    if (this.field.required && (!value || value === '')) {
+    if (this.isFieldRequired() && (!value || value === '')) {
       return false;
     }
     // If field has a value, it must be valid
@@ -75,19 +113,21 @@ export class FieldsOutletComponent {
     if (!this.field) return true;
 
     const value = this.getFieldValue();
+    const validation = this.getFieldValidation();
+    const fieldType = this.getFieldType();
 
     // Required field validation
-    if (this.field.required && (!value || value === '')) {
+    if (this.isFieldRequired() && (!value || value === '')) {
       return false;
     }
 
     // Skip validation if field is not required and empty
-    if (!this.field.required && (!value || value === '')) {
+    if (!this.isFieldRequired() && (!value || value === '')) {
       return true;
     }
 
     // Type-specific validation
-    if (this.field.type === 'email' && value) {
+    if (fieldType === 'email' && value) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(value)) {
         return false;
@@ -95,25 +135,25 @@ export class FieldsOutletComponent {
     }
 
     // Custom validation
-    if (this.field.validation?.customValidator && value) {
-      const customError = this.field.validation.customValidator(value);
+    if (validation.customValidator && value) {
+      const customError = validation.customValidator(value);
       if (customError) {
         return false;
       }
     }
 
     // Length validation
-    if (this.field.validation?.minLength && value && value.length < this.field.validation.minLength) {
+    if (validation.minLength && value && value.length < validation.minLength) {
       return false;
     }
 
-    if (this.field.validation?.maxLength && value && value.length > this.field.validation.maxLength) {
+    if (validation.maxSize && value && value.length > validation.maxSize) {
       return false;
     }
 
     // Pattern validation
-    if (this.field.validation?.pattern && value) {
-      const regex = new RegExp(this.field.validation.pattern);
+    if (validation.pattern && value) {
+      const regex = new RegExp(validation.pattern);
       if (!regex.test(value)) {
         return false;
       }
@@ -128,9 +168,11 @@ export class FieldsOutletComponent {
 
     const value = this.getFieldValue();
     const isTouched = this.fieldTouched();
+    const validation = this.getFieldValidation();
+    const fieldType = this.getFieldType();
 
     // Show errors for required fields even if not touched
-    if (this.field.required && (!value || value === '')) {
+    if (this.isFieldRequired() && (!value || value === '')) {
       return `${this.field.label} is required`;
     }
 
@@ -138,7 +180,7 @@ export class FieldsOutletComponent {
     if (!isTouched) return null;
 
     // Type-specific validation
-    if (this.field.type === 'email' && value) {
+    if (fieldType === 'email' && value) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(value)) {
         return 'Please enter a valid email address';
@@ -146,24 +188,24 @@ export class FieldsOutletComponent {
     }
 
     // Custom validation
-    if (this.field.validation?.customValidator && value) {
-      const customError = this.field.validation.customValidator(value);
+    if (validation.customValidator && value) {
+      const customError = validation.customValidator(value);
       if (customError) {
         return customError;
       }
     }
 
     // Length validation
-    if (this.field.validation?.minLength && value && value.length < this.field.validation.minLength) {
-      return `${this.field.label} must be at least ${this.field.validation.minLength} characters`;
+    if (validation.minLength && value && value.length < validation.minLength) {
+      return `${this.field.label} must be at least ${validation.minLength} characters`;
     }
 
-    if (this.field.validation?.maxLength && value && value.length > this.field.validation.maxLength) {
-      return `${this.field.label} must be no more than ${this.field.validation.maxLength} characters`;
+    if (validation.maxSize && value && value.length > validation.maxSize) {
+      return `${this.field.label} must be no more than ${validation.maxSize} characters`;
     }
 
     // Pattern validation
-    if (this.field.validation?.pattern && value) {
+    if (validation.pattern && value) {
       return `Please enter a valid ${this.field.label.toLowerCase()}`;
     }
 

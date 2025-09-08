@@ -6,22 +6,22 @@
   @if (field) {
     <form class="fields-outlet__form" (ngSubmit)="onSubmit($event)">
       <div class="field-container">
-        <label [for]="field.id" class="field-label">
+        <label [for]="getFieldId()" class="field-label">
           {{ field.label }}
-          @if (field.required) {
+          @if (isRequiredForTemplate()) {
             <span class="required-indicator">*</span>
           }
         </label>
 
-        @switch (field.type) {
+        @switch (getFieldTypeForTemplate()) {
           @case ('text') {
             <input
               type="text"
-              [id]="field.id"
-              [name]="field.id"
+              [id]="getFieldId()"
+              [name]="getFieldId()"
               [value]="getFieldValue()"
-              [placeholder]="field.placeholder || ''"
-              [required]="field.required"
+              [placeholder]="getPlaceholderText()"
+              [required]="isRequiredForTemplate()"
               (input)="onFieldChange($event)"
               class="field-input"
               [class.field-input--error]="getFieldError()"
@@ -30,11 +30,11 @@
           @case ('number') {
             <input
               type="number"
-              [id]="field.id"
-              [name]="field.id"
+              [id]="getFieldId()"
+              [name]="getFieldId()"
               [value]="getFieldValue()"
-              [placeholder]="field.placeholder || ''"
-              [required]="field.required"
+              [placeholder]="getPlaceholderText()"
+              [required]="isRequiredForTemplate()"
               (input)="onFieldChange($event)"
               class="field-input"
               [class.field-input--error]="getFieldError()"
@@ -43,11 +43,11 @@
           @case ('email') {
             <input
               type="email"
-              [id]="field.id"
-              [name]="field.id"
+              [id]="getFieldId()"
+              [name]="getFieldId()"
               [value]="getFieldValue()"
-              [placeholder]="field.placeholder || ''"
-              [required]="field.required"
+              [placeholder]="getPlaceholderText()"
+              [required]="isRequiredForTemplate()"
               (input)="onFieldChange($event)"
               class="field-input"
               [class.field-input--error]="getFieldError()"
@@ -56,11 +56,11 @@
           @case ('password') {
             <input
               type="password"
-              [id]="field.id"
-              [name]="field.id"
+              [id]="getFieldId()"
+              [name]="getFieldId()"
               [value]="getFieldValue()"
-              [placeholder]="field.placeholder || ''"
-              [required]="field.required"
+              [placeholder]="getPlaceholderText()"
+              [required]="isRequiredForTemplate()"
               (input)="onFieldChange($event)"
               class="field-input"
               [class.field-input--error]="getFieldError()"
@@ -68,11 +68,11 @@
           }
           @case ('textarea') {
             <textarea
-              [id]="field.id"
-              [name]="field.id"
+              [id]="getFieldId()"
+              [name]="getFieldId()"
               [value]="getFieldValue()"
-              [placeholder]="field.placeholder || ''"
-              [required]="field.required"
+              [placeholder]="getPlaceholderText()"
+              [required]="isRequiredForTemplate()"
               (input)="onFieldChange($event)"
               class="field-textarea"
               [class.field-textarea--error]="getFieldError()"
@@ -81,10 +81,10 @@
           }
           @case ('select') {
             <select
-              [id]="field.id"
-              [name]="field.id"
+              [id]="getFieldId()"
+              [name]="getFieldId()"
               [value]="getFieldValue()"
-              [required]="field.required"
+              [required]="isRequiredForTemplate()"
               (change)="onFieldChange($event)"
               class="field-select"
               [class.field-select--error]="getFieldError()"
