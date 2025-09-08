@@ -1,0 +1,125 @@
+<div class="fields-outlet">
+  @if (title) {
+    <h2 class="fields-outlet__title">{{ title }}</h2>
+  }
+
+  <form class="fields-outlet__form" (ngSubmit)="onSubmit($event)">
+    @for (field of fields; track field.id) {
+      <div class="field-container">
+        <label [for]="field.id" class="field-label">
+          {{ field.label }}
+          @if (field.required) {
+            <span class="required-indicator">*</span>
+          }
+        </label>
+
+        @switch (field.type) {
+          @case ('text') {
+            <input
+              type="text"
+              [id]="field.id"
+              [name]="field.id"
+              [value]="getFieldValue(field.id)"
+              [placeholder]="field.placeholder || ''"
+              [required]="field.required"
+              (input)="onFieldChange(field.id, $event)"
+              class="field-input"
+              [class.field-input--error]="getFieldError(field.id)"
+            />
+          }
+          @case ('number') {
+            <input
+              type="number"
+              [id]="field.id"
+              [name]="field.id"
+              [value]="getFieldValue(field.id)"
+              [placeholder]="field.placeholder || ''"
+              [required]="field.required"
+              (input)="onFieldChange(field.id, $event)"
+              class="field-input"
+              [class.field-input--error]="getFieldError(field.id)"
+            />
+          }
+          @case ('email') {
+            <input
+              type="email"
+              [id]="field.id"
+              [name]="field.id"
+              [value]="getFieldValue(field.id)"
+              [placeholder]="field.placeholder || ''"
+              [required]="field.required"
+              (input)="onFieldChange(field.id, $event)"
+              class="field-input"
+              [class.field-input--error]="getFieldError(field.id)"
+            />
+          }
+          @case ('password') {
+            <input
+              type="password"
+              [id]="field.id"
+              [name]="field.id"
+              [value]="getFieldValue(field.id)"
+              [placeholder]="field.placeholder || ''"
+              [required]="field.required"
+              (input)="onFieldChange(field.id, $event)"
+              class="field-input"
+              [class.field-input--error]="getFieldError(field.id)"
+            />
+          }
+          @case ('textarea') {
+            <textarea
+              [id]="field.id"
+              [name]="field.id"
+              [value]="getFieldValue(field.id)"
+              [placeholder]="field.placeholder || ''"
+              [required]="field.required"
+              (input)="onFieldChange(field.id, $event)"
+              class="field-textarea"
+              [class.field-textarea--error]="getFieldError(field.id)"
+              rows="4"
+            ></textarea>
+          }
+          @case ('select') {
+            <select
+              [id]="field.id"
+              [name]="field.id"
+              [value]="getFieldValue(field.id)"
+              [required]="field.required"
+              (change)="onFieldChange(field.id, $event)"
+              class="field-select"
+              [class.field-select--error]="getFieldError(field.id)"
+            >
+              <option value="">Select {{ field.label.toLowerCase() }}</option>
+              @for (option of field.options; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          }
+        }
+
+        @if (getFieldError(field.id)) {
+          <div class="field-error">
+            {{ getFieldError(field.id) }}
+          </div>
+        }
+      </div>
+    }
+
+    <div class="fields-outlet__actions">
+      <button
+        type="submit"
+        class="btn btn--primary"
+        [disabled]="!isFormValid()"
+      >
+        Submit
+      </button>
+      <button
+        type="button"
+        class="btn btn--secondary"
+        (click)="resetForm()"
+      >
+        Reset
+      </button>
+    </div>
+  </form>
+</div>
