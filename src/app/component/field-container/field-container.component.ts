@@ -31,10 +31,6 @@ export interface FieldConfig {
   options?: { value: string; label: string }[];
 }
 
-export interface FieldValue {
-  [key: string]: any;
-}
-
 @Component({
   selector: 'app-field-container',
   standalone: true,
@@ -42,82 +38,16 @@ export interface FieldValue {
   templateUrl: './field-container.component.html',
   styleUrls: ['./field-container.component.scss']
 })
-export class FieldContainerComponent implements OnChanges, AfterViewInit {
+export class FieldContainerComponent {
   @Input() field: FieldConfig | null = null;
-  @Input() title?: string;
-  @Output() formSubmit = new EventEmitter<any>();
+ 
   @Output() fieldChange = new EventEmitter<any>();
 
-  @ViewChild('fieldContainer', { read: ViewContainerRef }) fieldContainer!: ViewContainerRef;
-
-  private fieldLogic = inject(FieldLogicService);
-  private currentFieldComponent: ComponentRef<BaseFieldComponent> | null = null;
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['field'] && !changes['field'].firstChange) {
-      this.renderField();
-    }
-  }
-
-  ngAfterViewInit() {
-    this.renderField();
-  }
-
-  private renderField() {
-    if (!this.fieldContainer) return;
-    // Destroy previous
-    if (this.currentFieldComponent) {
-      this.currentFieldComponent.destroy();
-      this.currentFieldComponent = null;
-    }
-
-    if (!this.field) return;
-
-    const type = this.field.input?.dataType || 'text';
-    const compType = this.getComponentType(type);
-    this.fieldContainer.clear();
-    const compRef = this.fieldContainer.createComponent(compType);
-    compRef.instance.field = this.field;
-    compRef.instance.fieldChange.subscribe((v: any) => this.fieldChange.emit(v));
-    this.currentFieldComponent = compRef as ComponentRef<BaseFieldComponent>;
-  }
-
-  private getComponentType(dataType: string) {
-    switch (dataType) {
-      case 'number':
-        return NumberFieldComponent;
-      case 'email':
-        return EmailFieldComponent;
-      case 'tel':
-        return TelFieldComponent;
-      default:
-        return TextFieldComponent;
-    }
-  }
-
-  isFormValid(): boolean {
-    return !!(this.currentFieldComponent && this.currentFieldComponent.instance.isFieldValid());
-  }
-
-  getFieldValue(): any {
-    return this.currentFieldComponent ? this.currentFieldComponent.instance.getFieldValue() : '';
-  }
-
+  // Simple form submit handler used by template
   onSubmit(event: Event) {
     event.preventDefault();
-    if (this.currentFieldComponent) this.currentFieldComponent.instance.markFieldAsTouched();
-    if (this.isFormValid()) this.formSubmit.emit(this.getFieldValue());
-  }
-
-  resetForm() {
-    if (this.currentFieldComponent) this.currentFieldComponent.instance.resetField();
-  }
-
-  // Expose current error message (if any) for template
-  get errorMessage(): string | null {
-    if (!this.currentFieldComponent) return null;
-    // assume BaseFieldComponent has getFieldError()
-    // @ts-ignore - some field components may implement getFieldError
-    return (this.currentFieldComponent.instance as any).getFieldError ? (this.currentFieldComponent.instance as any).getFieldError() : null;
+    if (!this.field) return;
+    // Emit a change event so parent can react; payload can be extended later
+    this.fieldChange.emit({ name: this.field.name });
   }
 }

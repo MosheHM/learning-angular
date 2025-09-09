@@ -62,16 +62,14 @@ ng build --configuration production
 
 ### 2. New Control Flow
 ```html
-<!-- OLD -->
-<div *ngIf="condition">Content</div>
-<div *ngFor="let item of items">{{ item }}</div>
-
-<!-- NEW -->
+<!-- NEW flow syntax -->
 @if (condition) {
   <div>Content</div>
 }
 @for (item of items; track item.id) {
   <div>{{ item }}</div>
+} @empty {
+  <div>No items</div>
 }
 ```
 
