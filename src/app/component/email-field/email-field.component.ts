@@ -34,7 +34,7 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
       }
     </div>
   `,
-  styleUrls: ['../fields-outlet/fields-outlet.scss']
+  styleUrls: ['../field-container/field-container.scss']
 })
 export class EmailFieldComponent extends BaseFieldComponent {
 }

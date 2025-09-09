@@ -1,0 +1,28 @@
+    <div class="fields-outlet">
+      @if (title) {
+        <h2 class="fields-outlet__title">{{ title }}</h2>
+      }
+
+      @if (field) {
+        <form class="fields-outlet__form" (ngSubmit)="onSubmit($event)">
+          <div #fieldContainer></div>
+
+          <div class="fields-outlet__actions">
+            <button
+              type="submit"
+              class="btn btn--primary"
+              [disabled]="!isFormValid()"
+            >
+              Submit
+            </button>
+            <button
+              type="button"
+              class="btn btn--secondary"
+              (click)="resetForm()"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      }
+    </div>

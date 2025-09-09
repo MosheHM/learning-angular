@@ -2,11 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { map, Observable } from 'rxjs';
-import { FieldsOutletComponent, FieldConfig } from '../../component/fields-outlet/fields-outlet';
+import { FieldContainer, FieldConfig } from '../../component/field-container/field-container';
 
 @Component({
   selector: 'app-right',
-  imports: [CommonModule, FieldsOutletComponent],
+  imports: [CommonModule, FieldContainer],
   templateUrl: './right.html',
   styleUrl: './right.scss'
 })

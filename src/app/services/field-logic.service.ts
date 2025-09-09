@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { FieldConfig } from '../component/fields-outlet/fields-outlet';
+import { FieldConfig } from '../component/field-container/field-container';
 
 export interface FieldState {
   value: any;

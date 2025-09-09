@@ -1,19 +1,13 @@
 <div class="section-content">
   <h2>Form Fields (Left Section)</h2>
 
-  @defer (on interaction) {
   <div class="demo-section">
     <h3>Programmatic Field Rendering Demo</h3>
     <p>This demonstrates programmatic rendering of field components using ViewContainerRef</p>
 
   </div>
-  } @placeholder {
-  <div class="demo-placeholder">
-    <p>Click to load the interactive demo</p>
-    <button>Load Demo</button>
-  </div>
-  }
 
+  @defer (on interaction) {
 
   @defer (when !loading && !error) {
   <div class="form-fields-list">
@@ -26,11 +20,9 @@
         <p><strong>Component:</strong> {{ field.label }}</p>
       </div>
 
-      <app-fields-outlet [title]="'Dynamic Field Demo (Programmatic Rendering)'" 
-                        [field]="field"
-                        (formSubmit)="onDemoFieldSubmit($event)" 
-                        (fieldChange)="onDemoFieldChange($event)">
-      </app-fields-outlet>
+      <app-field-container [title]="'Dynamic Field Demo (Programmatic Rendering)'" [field]="field"
+        (formSubmit)="onDemoFieldSubmit($event)" (fieldChange)="onDemoFieldChange($event)">
+      </app-field-container>
     </div>
     }
   </div>
@@ -44,4 +36,14 @@
     <button (click)="refreshData()">Retry</button>
   </div>
   }
+
+  } @placeholder {
+  <div class="demo-placeholder">
+    <p>Click to load the interactive demo</p>
+    <button>Load Demo</button>
+  </div>
+  }
+
+
+
 </div>

@@ -2,11 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { map, Observable } from 'rxjs';
-import { FieldsOutletComponent, FieldConfig } from '../../component/fields-outlet/fields-outlet';
+import { FieldContainer, FieldConfig } from '../../component/field-container/field-container';
 
 @Component({
   selector: 'app-left',
-  imports: [CommonModule, FieldsOutletComponent],
+  imports: [CommonModule, FieldContainer],
   templateUrl: './left.html',
   styleUrl: './left.scss'
 })
@@ -36,7 +36,7 @@ export class Left implements OnInit {
 
     // Handle loading and error states
     this.formFields$.subscribe({
-      next: () => {
+      next: (fields) => {
         this.loading = false;
       },
       error: (err) => {

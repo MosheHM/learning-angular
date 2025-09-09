@@ -15,13 +15,12 @@ export interface FieldConfig {
         order: number;
     };
     input: {
-        dataType: 'text' | 'number' | 'email' | 'tel' | 'password' | 'textarea' | 'select';
+        dataType: 'text' | 'number';
         validation?: {
             required?: boolean;
             maxSize?: number;
             minLength?: number;
             pattern?: string;
-            customValidator?: (value: any) => string | null;
         };
     };
     toolTipText?: string;
@@ -34,41 +33,12 @@ export interface FieldValue {
 }
 
 @Component({
-    selector: 'app-fields-outlet',
+    selector: 'app-field-container',
     imports: [CommonModule],
-    template: `
-    <div class="fields-outlet">
-      @if (title) {
-        <h2 class="fields-outlet__title">{{ title }}</h2>
-      }
-
-      @if (field) {
-        <form class="fields-outlet__form" (ngSubmit)="onSubmit($event)">
-          <div #fieldContainer></div>
-
-          <div class="fields-outlet__actions">
-            <button
-              type="submit"
-              class="btn btn--primary"
-              [disabled]="!isFormValid()"
-            >
-              Submit
-            </button>
-            <button
-              type="button"
-              class="btn btn--secondary"
-              (click)="resetForm()"
-            >
-              Reset
-            </button>
-          </div>
-        </form>
-      }
-    </div>
-  `,
-    styleUrls: ['./fields-outlet.scss']
+    templateUrl: './field-container.html',
+    styleUrls: ['./field-container.scss']
 })
-export class FieldsOutletComponent implements OnChanges, AfterViewInit {
+export class FieldContainer implements OnChanges, AfterViewInit {
     @Input() field: FieldConfig | null = null;
     @Input() title?: string = '';
     @Output() formSubmit = new EventEmitter<any>();
@@ -126,39 +96,6 @@ export class FieldsOutletComponent implements OnChanges, AfterViewInit {
                 return TelFieldComponent;
             default:
                 return TextFieldComponent; // Fallback to text field
-        }
-    }
-
-    // Check if form is valid
-    isFormValid(): boolean {
-        if (!this.field || !this.currentFieldComponent) return false;
-        return this.currentFieldComponent.instance.isFieldValid();
-    }
-
-    // Get field value
-    getFieldValue(): any {
-        if (!this.currentFieldComponent) return '';
-        return this.currentFieldComponent.instance.getFieldValue();
-    }
-
-    // Handle form submission
-    onSubmit(event: Event): void {
-        event.preventDefault();
-
-        if (!this.currentFieldComponent) return;
-
-        // Mark field as touched for validation display
-        this.currentFieldComponent.instance.markFieldAsTouched();
-
-        if (this.isFormValid()) {
-            this.formSubmit.emit(this.getFieldValue());
-        }
-    }
-
-    // Reset form
-    resetForm(): void {
-        if (this.currentFieldComponent) {
-            this.currentFieldComponent.instance.resetField();
         }
     }
 }
