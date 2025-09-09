@@ -2,11 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { map, Observable } from 'rxjs';
-import { FieldsOutletComponent, FieldConfig } from '../../component/fields-outlet/fields-outlet';
+import { FieldContainerComponent, FieldConfig } from '../../component/field-container/field-container.component';
 
 @Component({
   selector: 'app-left',
-  imports: [CommonModule, FieldsOutletComponent],
+  imports: [CommonModule, FieldContainerComponent],
   templateUrl: './left.html',
   styleUrl: './left.scss'
 })
@@ -28,8 +28,8 @@ export class Left implements OnInit {
     this.formFields$ = this.dataService.getFormFields<FieldConfig>()
       .pipe(
         map(fields => fields
-          .filter(field => field.layout.sectionId === "leftSection")
-          .sort((a, b) => a.layout.order - b.layout.order)
+    .filter(field => field.layout?.sectionId === "leftSection")
+    .sort((a, b) => (a.layout?.order || 0) - (b.layout?.order || 0))
         )
       );
 

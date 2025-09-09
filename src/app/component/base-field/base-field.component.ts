@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FieldConfig } from '../fields-outlet/fields-outlet';
+import { FieldConfig } from '../field-container/field-container.component';
 import { FieldLogicService } from '../../services/field-logic.service';
 
 @Component({

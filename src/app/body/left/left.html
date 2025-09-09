@@ -26,11 +26,11 @@
         <p><strong>Component:</strong> {{ field.label }}</p>
       </div>
 
-      <app-fields-outlet [title]="'Dynamic Field Demo (Programmatic Rendering)'" 
-                        [field]="field"
-                        (formSubmit)="onDemoFieldSubmit($event)" 
-                        (fieldChange)="onDemoFieldChange($event)">
-      </app-fields-outlet>
+      <app-field-container [title]="'Dynamic Field Demo (Programmatic Rendering)'" 
+        [field]="field" 
+        (formSubmit)="onDemoFieldSubmit($event)" 
+        (fieldChange)="onDemoFieldChange($event)">
+      </app-field-container>
     </div>
     }
   </div>

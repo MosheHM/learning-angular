@@ -2,11 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { map, Observable } from 'rxjs';
-import { FieldsOutletComponent, FieldConfig } from '../../component/fields-outlet/fields-outlet';
+import { FieldContainerComponent, FieldConfig } from '../../component/field-container/field-container.component';
 
 @Component({
   selector: 'app-right',
-  imports: [CommonModule, FieldsOutletComponent],
+  imports: [CommonModule, FieldContainerComponent],
   templateUrl: './right.html',
   styleUrl: './right.scss'
 })
@@ -26,8 +26,8 @@ export class Right implements OnInit {
     this.error = null;
 
     this.formFields$ = this.dataService.getFormFields<FieldConfig>()
-      .pipe(map(fields => fields.filter(field => field.layout.sectionId === "rightSection")
-        .sort((a, b) => a.layout.order - b.layout.order)
+      .pipe(map(fields => fields.filter(field => field.layout?.sectionId === "rightSection")
+        .sort((a, b) => (a.layout?.order || 0) - (b.layout?.order || 0))
       ));
 
     this.formFields$.subscribe({
