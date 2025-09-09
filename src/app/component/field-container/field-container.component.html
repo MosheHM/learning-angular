@@ -4,17 +4,15 @@
   }
 
   @if (field) {
-    <form class="field-container__form" (ngSubmit)="onSubmit($event)">
-      <div class="field-container__body">
-        <label class="field-label">
-          {{ field.label }}
-          @if (field.input.validation?.required) {
-            <span class="required-indicator">*</span>
-          }
-        </label>
-
-        <div></div>
-
-      </div>
-    </form>
+  <div class="field-container__body">
+    <label class="field-label">
+      {{ field.label }}
+      @if (field.input.validation?.required) {
+      <span class="required-indicator">*</span>
+      }
+    </label>
+  
+    <div></div>
+  
+  </div>
   }

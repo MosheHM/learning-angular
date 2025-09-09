@@ -1,36 +1,12 @@
 <div class="section-content">
   <h2>Form Fields (Left Section)</h2>
 
-  @defer (on interaction) {
-  <div class="demo-section">
-    <h3>Programmatic Field Rendering Demo</h3>
-    <p>This demonstrates programmatic rendering of field components using ViewContainerRef</p>
-
-  </div>
-  } @placeholder {
-  <div class="demo-placeholder">
-    <p>Click to load the interactive demo</p>
-    <button>Load Demo</button>
-  </div>
-  }
-
-
   @defer (when !loading && !error) {
   <div class="form-fields-list">
-    <button (click)="refreshData()" class="refresh-btn">Refresh Data</button>
 
     @for (field of formFields$ | async; track field.name) {
     <div class="field-card">
-      <div class="current-field-info">
-        <p><strong>Current Field Type:</strong> {{ field.input.dataType }}</p>
-        <p><strong>Component:</strong> {{ field.label }}</p>
-      </div>
-
-      <app-field-container [title]="'Dynamic Field Demo (Programmatic Rendering)'" 
-        [field]="field" 
-        (formSubmit)="onDemoFieldSubmit($event)" 
-        (fieldChange)="onDemoFieldChange($event)">
-      </app-field-container>
+      <app-field-container [field]="field" ></app-field-container>
     </div>
     }
   </div>
