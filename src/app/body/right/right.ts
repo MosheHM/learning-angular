@@ -1,32 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { map, Observable } from 'rxjs';
-import { FieldsOutletComponent, FieldConfig } from '../../component/fields-outlet/fields-outlet';
+import { FieldContainerComponent, FieldConfig } from '../../component/field-container/field-container.component';
 
 @Component({
   selector: 'app-right',
-  imports: [CommonModule, FieldsOutletComponent],
+  imports: [CommonModule, FieldContainerComponent],
   templateUrl: './right.html',
   styleUrl: './right.scss'
 })
 export class Right implements OnInit {
-  formFields$!: Observable<any[]>;
+  formFields$!: Observable<FieldConfig[]>;
   loading = false;
   error: string | null = null;
-
-  // Demo field for the fields-outlet component
-  demoField: FieldConfig = {
-    id: 'demo-email',
-    type: 'email',
-    label: 'Email Address',
-    placeholder: 'Enter your email address',
-    required: true,
-    validation: {
-      minLength: 5,
-      maxLength: 100
-    }
-  };
 
   constructor(private dataService: DataService) {}
 
@@ -38,12 +25,11 @@ export class Right implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.formFields$ = this.dataService.getFormFields()
-      .pipe(map(fields => fields.filter(field => field.layout.sectionId === "rightSection")
-        .sort((a, b) => a.layout.order - b.layout.order)
+    this.formFields$ = this.dataService.getFormFields<FieldConfig>()
+      .pipe(map(fields => fields.filter(field => field.layout?.sectionId === "rightSection")
+        .sort((a, b) => (a.layout?.order || 0) - (b.layout?.order || 0))
       ));
 
-    // Subscribe only once to handle loading states
     this.formFields$.subscribe({
       next: () => this.loading = false,
       error: (err) => {
@@ -57,13 +43,13 @@ export class Right implements OnInit {
     this.loadFormFields();
   }
 
-  // Handle demo field events
-  onDemoFieldSubmit(value: any): void {
+  onDemoFieldSubmit(value: FieldConfig): void {
     console.log('Demo field submitted:', value);
-    alert(`Form submitted with value: ${value}`);
+    alert(`${value.label} submitted with value: ${value}`);
   }
 
-  onDemoFieldChange(value: any): void {
+  onDemoFieldChange(value: FieldConfig): void {
     console.log('Demo field changed:', value);
   }
+
 }

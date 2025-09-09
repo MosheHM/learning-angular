@@ -58,8 +58,8 @@ export class DataService {
   /**
    * Fetch form fields data
    */
-  getFormFields(): Observable<any[]> {
-    return this.get<any[]>('formFields');
+  getFormFields<T>(): Observable<T[]> {
+    return this.get<T[]>('formFields');
   }
 
   /**

@@ -1,0 +1,20 @@
+<div class="field-container-root">
+  <h2 *ngIf="title" class="field-container__title">{{ title }}</h2>
+
+  <form *ngIf="field" class="field-container__form" (ngSubmit)="onSubmit($event)">
+    <div class="field-container__body">
+      <label class="field-label">{{ field.label }} <span *ngIf="field.input?.validation?.required" class="required-indicator">*</span></label>
+
+      <div #fieldContainer></div>
+
+      <div class="field-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+    </div>
+
+    <div class="field-container__actions">
+      <button type="submit" class="btn btn--primary" [disabled]="!isFormValid()">Submit</button>
+      <button type="button" class="btn btn--secondary" (click)="resetForm()">Reset</button>
+    </div>
+  </form>
+</div>

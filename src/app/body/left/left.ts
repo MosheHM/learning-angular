@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { map, Observable } from 'rxjs';
+import { FieldContainerComponent, FieldConfig } from '../../component/field-container/field-container.component';
 
 @Component({
   selector: 'app-left',
-  imports: [CommonModule],
+  imports: [CommonModule, FieldContainerComponent],
   templateUrl: './left.html',
   styleUrl: './left.scss'
 })
 export class Left implements OnInit {
-  formFields$!: Observable<any[]>;
+  formFields$!: Observable<FieldConfig[]>;
   loading = false;
   error: string | null = null;
 
@@ -24,11 +25,11 @@ export class Left implements OnInit {
     this.loading = true;
     this.error = null;
     
-    this.formFields$ = this.dataService.getFormFields()
+    this.formFields$ = this.dataService.getFormFields<FieldConfig>()
       .pipe(
         map(fields => fields
-          .filter(field => field.layout.sectionId === "leftSection")
-          .sort((a, b) => a.layout.order - b.layout.order)
+    .filter(field => field.layout?.sectionId === "leftSection")
+    .sort((a, b) => (a.layout?.order || 0) - (b.layout?.order || 0))
         )
       );
 
@@ -47,5 +48,14 @@ export class Left implements OnInit {
 
   refreshData(): void {
     this.loadFormFields();
+  }
+
+  onDemoFieldSubmit(value: FieldConfig): void {
+    console.log('Demo field submitted:', value);
+    alert(`${value.label} submitted with value: ${value}`);
+  }
+
+  onDemoFieldChange(value: FieldConfig): void {
+    console.log('Demo field changed:', value);
   }
 }
