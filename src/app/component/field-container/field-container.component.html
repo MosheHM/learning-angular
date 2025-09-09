@@ -1,6 +1,6 @@
 <div class="field-container-root">
   @if (field && field.label) {
-    <h2 class="field-container__title">{{ field.label }}</h2>
+  <h2 class="field-container__title">{{ field.label }}</h2>
   }
 
   @if (field) {
@@ -11,8 +11,21 @@
       <span class="required-indicator">*</span>
       }
     </label>
-  
-    <div></div>
-  
+
+    <div>
+      @switch (field.input.dataType) {
+        @case ('text') {
+          <app-text-input [field]="field" />
+        }
+        @case ('number') {
+          <app-number-input [field]="field" />
+        }
+        @default {
+          <div>Unsupported field type: {{ field.input.dataType }}</div>
+        }
+      }
+    </div>
+
   </div>
   }
+</div>

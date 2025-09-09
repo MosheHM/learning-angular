@@ -1,0 +1,9 @@
+<div class="section-content">
+
+  @for (field of fields; track field.name) {
+  <div class="field-card">
+    <app-field-container [field]="field"></app-field-container>
+  </div>
+  }
+
+</div>

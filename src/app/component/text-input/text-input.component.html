@@ -1,0 +1,30 @@
+<div class="text-input-container">
+  @if (field) {
+    <label [for]="field.name" class="input-label">
+      {{ label }}
+      @if (isRequired) {
+        <span class="required-indicator">*</span>
+      }
+    </label>
+    
+    <input 
+      type="text" 
+      [id]="field.name"
+      [name]="field.name" 
+      [(ngModel)]="value"
+      [placeholder]="placeholder"
+      [required]="isRequired"
+      [attr.minlength]="minLength"
+      [disabled]="disabled"
+      (input)="onInputChange($event)"
+      (blur)="onTouched()"
+      class="text-input">
+    
+    @if (field.toolTipText) {
+      <div class="tooltip">
+        <i class="info-icon">i</i>
+        <span class="tooltip-text">{{ field.toolTipText }}</span>
+      </div>
+    }
+  }
+</div>

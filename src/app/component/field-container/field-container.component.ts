@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ViewContainerRef, OnChanges, SimpleChanges, ComponentRef, inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TextInputComponent } from '../text-input/text-input.component';
+import { NumberInputComponent } from '../number-input/number-input.component';
 
 
 export interface FieldConfig {
@@ -11,14 +13,11 @@ export interface FieldConfig {
   };
   input: {
     dataType: string;
-    placeholder?: string;
-    options?: { value: string; label: string }[];
     validation?: {
       required?: boolean;
       maxSize?: number;
       minLength?: number;
       pattern?: string;
-      customValidator?: (value: any) => string | null;
     };
   };
   toolTipText?: string;
@@ -29,13 +28,12 @@ export interface FieldConfig {
 @Component({
   selector: 'app-field-container',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TextInputComponent, NumberInputComponent],
   templateUrl: './field-container.component.html',
   styleUrls: ['./field-container.component.scss']
 })
 export class FieldContainerComponent {
   @Input() field: FieldConfig | null = null;
- 
   @Output() fieldChange = new EventEmitter<any>();
 
 }

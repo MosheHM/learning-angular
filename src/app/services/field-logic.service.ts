@@ -63,14 +63,6 @@ export class FieldLogicService {
       }
     }
 
-    // Custom validation
-    if (validation.customValidator && value) {
-      const customError = validation.customValidator(value);
-      if (customError) {
-        return false;
-      }
-    }
-
     // Length validation
     if (validation.minLength && value && value.length < validation.minLength) {
       return false;
@@ -119,13 +111,6 @@ export class FieldLogicService {
       }
     }
 
-    // Custom validation
-    if (validation.customValidator && value) {
-      const customError = validation.customValidator(value);
-      if (customError) {
-        return customError;
-      }
-    }
 
     // Length validation
     if (validation.minLength && value && value.length < validation.minLength) {

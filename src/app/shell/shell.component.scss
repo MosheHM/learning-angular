@@ -1,0 +1,17 @@
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.shell-content {
+    flex: 1;
+    height: calc(100vh - 80px);
+    width: 100vw;
+    position: relative;
+}
+
+.page-container {
+    height: 100%;
+    width: 100%;
+}

@@ -1,0 +1,16 @@
+@defer (when !loading && !error) {
+  <div class="app-page">
+    @if (leftSectionFields$ | async; as leftSectionFields) {
+      <app-fields-section [fields]="leftSectionFields" />
+    }
+    @if (rightSectionFields$ | async; as rightSectionFields) {
+      <app-fields-section [fields]="rightSectionFields" />
+    }
+  </div>
+}
+ @loading {
+<div>Loading...</div>
+}
+ @error{
+<div>Error loading page.</div>
+}
