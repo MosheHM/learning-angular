@@ -9,15 +9,16 @@ import { Page } from '../component/page/page';
   standalone: true,
   imports: [CommonModule, RouterOutlet, Header, Page],
   template: `
-    <div class="app-shell">
-      <app-header></app-header>
-      <div class="shell-content">
-        <div class="page-container">
-          <app-page></app-page>
+      <router-outlet>
+        <div class="app-shell">
+          <app-header></app-header>
+          <div class="shell-content">
+            <div class="page-container">
+              <app-page></app-page>
+            </div>
+          </div>
         </div>
-        <router-outlet></router-outlet>
-      </div>
-    </div>
+      </router-outlet>
   `,
   styleUrl: './shell.component.scss'
 })
