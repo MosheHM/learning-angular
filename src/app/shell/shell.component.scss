@@ -1,13 +1,19 @@
 .app-shell {
     display: flex;
-    flex-direction: column;
     min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 250px; // Account for sidebar width
+    display: flex;
+    flex-direction: column;
 }
 
 .shell-content {
     flex: 1;
     height: calc(100vh - 80px);
-    width: 100vw;
+    width: 100%;
     position: relative;
 }
 
