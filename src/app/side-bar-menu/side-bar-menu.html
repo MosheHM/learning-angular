@@ -1,0 +1,15 @@
+<div class="side-bar-menu">
+  <nav class="sidebar-nav">
+    <ul class="menu-list">
+      <li class="menu-item" *ngFor="let item of menuItems">
+        <button
+          class="menu-button"
+          (click)="onMenuItemClick(item)"
+          type="button"
+        >
+          {{ item.label }}
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>
