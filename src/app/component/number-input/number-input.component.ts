@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { FieldConfig } from '../../component/field-container/field-container.component';
 
 @Component({
@@ -8,16 +8,9 @@ import { FieldConfig } from '../../component/field-container/field-container.com
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './number-input.component.html',
-  styleUrls: ['./number-input.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NumberInputComponent),
-      multi: true
-    }
-  ]
+  styleUrls: ['./number-input.component.scss']
 })
-export class NumberInputComponent implements ControlValueAccessor {
+export class NumberInputComponent {
   @Input() field: FieldConfig | null = null;
   @Output() valueChange = new EventEmitter<number>();
   
@@ -49,22 +42,5 @@ export class NumberInputComponent implements ControlValueAccessor {
     this.value = numValue;
     this.onChange(numValue);
     this.valueChange.emit(numValue as number);
-  }
-
-  // ControlValueAccessor interface methods
-  writeValue(value: any): void {
-    this.value = value !== undefined && value !== null ? value : null;
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
   }
 }
