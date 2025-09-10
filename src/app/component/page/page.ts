@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { FieldsSection } from "../fields-section/fields-section";
 import { Observable, map } from 'rxjs';
 import { DataService } from '../../services/data.service';
@@ -17,17 +18,20 @@ export class Page implements OnInit {
   loading = false;
   error: string | null = null;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.loadFormFields();
+    this.route.queryParams.subscribe(params => {
+      const pageId = params['section'] || 'orders';
+      this.loadFormFields(pageId);
+    });
   }
 
-  loadFormFields(): void {
+  loadFormFields(pageId: string): void {
     this.loading = true;
     this.error = null;
 
-    this.leftSectionFields$ = this.dataService.getFormFields<FieldConfig>()
+    this.leftSectionFields$ = this.dataService.getFormFieldsByPageId<FieldConfig>(pageId)
       .pipe(
         map(fields => fields
           .filter(field => field.layout?.sectionId === "leftSection")
@@ -35,7 +39,7 @@ export class Page implements OnInit {
         )
       );
 
-    this.rightSectionFields$ = this.dataService.getFormFields<FieldConfig>()
+    this.rightSectionFields$ = this.dataService.getFormFieldsByPageId<FieldConfig>(pageId)
       .pipe(
         map(fields => fields
           .filter(field => field.layout?.sectionId === "rightSection")

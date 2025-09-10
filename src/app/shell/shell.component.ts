@@ -12,10 +12,10 @@ import { SideBarMenu } from '../side-bar-menu/side-bar-menu';
   template: `
       <router-outlet>
         <div class="app-shell">
-          <app-side-bar-menu></app-side-bar-menu>
           <div class="main-content">
             <app-header></app-header>
             <div class="shell-content">
+              <app-side-bar-menu></app-side-bar-menu>
               <div class="page-container">
                 <app-page></app-page>
               </div>

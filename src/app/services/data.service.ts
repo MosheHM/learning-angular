@@ -56,10 +56,13 @@ export class DataService {
 
 
   /**
-   * Fetch form fields data
+   * Fetch form fields data by page id
    */
-  getFormFields<T>(): Observable<T[]> {
-    return this.get<T[]>('formFields');
+  getFormFieldsByPageId<T>(pageId: string): Observable<T[]> {
+    return this.get<{formFields: T[]}>(pageId).pipe(
+      map(res => res.formFields),
+      catchError(this.handleError)
+    );
   }
 
   /**
