@@ -7,13 +7,11 @@
 
 .input-label {
   font-size: 14px;
-  font-weight: 500;
   margin-bottom: 6px;
-  color: #333;
 }
 
 .required-indicator {
-  color: #e53935;
+  color: red;
   margin-left: 2px;
 }
 
@@ -22,70 +20,14 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
-  transition: border-color 0.2s ease;
   
   &:focus {
     outline: none;
-    border-color: #2196f3;
-    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+    border-color: #007bff;
   }
   
   &:disabled {
     background-color: #f5f5f5;
     cursor: not-allowed;
-  }
-}
-
-.tooltip {
-  position: relative;
-  display: inline-block;
-  margin-left: 8px;
-  
-  .info-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: #2196f3;
-    color: white;
-    font-style: normal;
-    font-size: 12px;
-    cursor: help;
-  }
-  
-  .tooltip-text {
-    visibility: hidden;
-    width: 200px;
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 6px 8px;
-    border-radius: 4px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-size: 12px;
-    
-    &::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #333 transparent transparent transparent;
-    }
-  }
-  
-  &:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
   }
 }
