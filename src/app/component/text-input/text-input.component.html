@@ -1,25 +1,15 @@
-<div class="text-input-container">
-  @if (field) {
-    <label [for]="field.name" class="input-label">
-      {{ label }}
-      @if (isRequired) {
-        <span class="required-indicator">*</span>
-      }
-    </label>
-    
-    <input 
-      type="text" 
+<div class="text-input-container" [formGroup]="form">
+  @if (field && formControl) {
+    <input
+      [formControlName]="field.name"
+      type="text"
       [id]="field.name"
-      [name]="field.name" 
-      [(ngModel)]="value"
+      [name]="field.name"
       [placeholder]="placeholder"
-      [required]="isRequired"
       [attr.minlength]="minLength"
-      [disabled]="disabled"
-      (input)="onInputChange($event)"
-      (blur)="onTouched()"
-      class="text-input">
-    
+      class="text-input"
+      [class.error]="formControl.invalid && formControl.touched">
+
     @if (field.toolTipText) {
       <div class="tooltip">
         <i class="info-icon">i</i>

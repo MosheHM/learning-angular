@@ -1,0 +1,13 @@
+<button
+  type="submit"
+  class="submit-button"
+  [class]="'submit-button--' + variant"
+  [disabled]="disabled || loading"
+  [class.submit-button--loading]="loading"
+  (click)="onSubmit()"
+>
+  @if (loading) {
+    <span class="submit-button__spinner"></span>
+  }
+  <span class="submit-button__text">{{ label }}</span>
+</button>

@@ -15,17 +15,24 @@
     <div>
       @switch (field.input.dataType) {
         @case ('text') {
-          <app-text-input [field]="field" />
+        <app-text-input [field]="field" [form]="form" [parent]="parent">
+        </app-text-input>
         }
         @case ('number') {
-          <app-number-input [field]="field" />
+        <app-number-input [field]="field" [form]="form" [parent]="parent">
+        </app-number-input>
         }
         @default {
-          <div>Unsupported field type: {{ field.input.dataType }}</div>
+        <div>Unsupported field type: {{ field.input.dataType }}</div>
         }
-      }
+        }
     </div>
 
+    @if (parent?.isFieldInvalid(field.name)) {
+    <div class="field-error">
+      {{ field.name }} is invalid.
+    </div>
+    }
   </div>
   }
 </div>

@@ -1,23 +1,28 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { FieldConfig } from '../../component/field-container/field-container.component';
+import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { FieldConfig } from '../../types/page.types';
 
 @Component({
   selector: 'app-number-input',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './number-input.component.html',
   styleUrls: ['./number-input.component.scss']
 })
-export class NumberInputComponent {
+export class NumberInputComponent implements OnInit {
   @Input() field: FieldConfig | null = null;
+  @Input() form!: FormGroup;
+  @Input() parent: any;
   @Output() valueChange = new EventEmitter<number>();
-  
-  value: number | null = null;
-  disabled: boolean = false;
-  onChange = (_: any) => {};
-  onTouched = () => {};
+
+  formControl!: FormControl;
+
+  ngOnInit() {
+    if (this.field && this.form) {
+      this.formControl = this.form.get(this.field.name) as FormControl;
+    }
+  }
 
   get isRequired(): boolean {
     return !!this.field?.input.validation?.required;
@@ -38,9 +43,6 @@ export class NumberInputComponent {
   onInputChange(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
     const numValue = inputValue ? parseFloat(inputValue) : null;
-    
-    this.value = numValue;
-    this.onChange(numValue);
     this.valueChange.emit(numValue as number);
   }
 }

@@ -2,4 +2,32 @@
   display: flex;
   width: 100%;
   height: 100%;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.page-form {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
 }

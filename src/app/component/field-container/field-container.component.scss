@@ -1,5 +1,11 @@
 .field-container-root {
   max-width: 500px;
-  background: #fff;
-  border: 1px solid #ddd;
+}
+
+.field-error {
+  margin-top: 0.25rem;
+}
+
+.required-indicator {
+  margin-left: 0.25rem;
 }
