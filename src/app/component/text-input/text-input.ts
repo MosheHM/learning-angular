@@ -4,17 +4,17 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { FieldConfig } from '../../types/page.types';
 
 @Component({
-  selector: 'app-number-input',
+  selector: 'app-text-input',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './number-input.component.html',
-  styleUrls: ['./number-input.component.scss']
+  templateUrl: './text-input.html',
+  styleUrls: ['./text-input.scss']
 })
-export class NumberInputComponent implements OnInit {
+export class TextInputComponent implements OnInit {
   @Input() field: FieldConfig | null = null;
   @Input() form!: FormGroup;
   @Input() parent: any;
-  @Output() valueChange = new EventEmitter<number>();
+  @Output() valueChange = new EventEmitter<string>();
 
   formControl!: FormControl;
 
@@ -28,8 +28,12 @@ export class NumberInputComponent implements OnInit {
     return !!this.field?.input.validation?.required;
   }
 
-  get maxSize(): number | undefined {
-    return this.field?.input.validation?.maxSize;
+  get minLength(): number | undefined {
+    return this.field?.input.validation?.minLength;
+  }
+
+  get pattern(): string | undefined {
+    return this.field?.input.validation?.pattern;
   }
 
   get placeholder(): string {
@@ -41,8 +45,7 @@ export class NumberInputComponent implements OnInit {
   }
 
   onInputChange(event: Event): void {
-    const inputValue = (event.target as HTMLInputElement).value;
-    const numValue = inputValue ? parseFloat(inputValue) : null;
-    this.valueChange.emit(numValue as number);
+    const value = (event.target as HTMLInputElement).value;
+    this.valueChange.emit(value);
   }
 }

@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-submit-button',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './submit-button.component.html',
-  styleUrls: ['./submit-button.component.scss']
+  templateUrl: './submit-button.html',
+  styleUrls: ['./submit-button.scss']
 })
 export class SubmitButtonComponent {
   @Input() label: string = 'Submit';

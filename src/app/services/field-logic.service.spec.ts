@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FieldLogicService } from './field-logic.service';
-import type { FieldConfig } from '../component/field-container/field-container.component';
+import type { FieldConfig } from '../types/page.types';
 
 describe('FieldLogicService', () => {
   let service: FieldLogicService;

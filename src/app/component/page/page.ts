@@ -3,8 +3,8 @@ import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators, FormControl, FormControlState } from '@angular/forms';
 import { FieldsSection } from "../fields-section/fields-section";
-import { SubmitButtonComponent } from '../submit-button/submit-button.component';
-import { Observable, map, of } from 'rxjs';
+import { SubmitButtonComponent } from '../submit-button/submit-button';
+import { Observable, map, of, forkJoin } from 'rxjs';
 import { DataService } from '../../services/data.service';
 import { FieldConfig, PageFormConfig, fieldValue, Field, FieldsPageDataForm } from '../../types/page.types';
 
@@ -42,27 +42,19 @@ export class Page implements OnInit {
     this.loading = true;
     this.error = null;
     
-    this.dataService.getPageById(pageId)
-      .subscribe({
-        next: (pageConfig) => {
-          this.pageConfig = pageConfig;
-          this.setupFieldSections(pageConfig.formFields);
-          this.loading = false;
-        },
-        error: (err) => {
-          this.loading = false;
-          this.error = err.message;
-        }
-      });
-
-    this.dataService.getPageData(pageId, this.currentEntityId).subscribe({
-
-      next: (pageData) => {
+    forkJoin({
+      pageConfig: this.dataService.getPageById(pageId),
+      pageData: this.dataService.getPageData(pageId, this.currentEntityId)
+    }).subscribe({
+      next: ({ pageConfig, pageData }) => {
+        this.pageConfig = pageConfig;
         this.pageData = pageData;
+        this.setupFieldSections(pageConfig.formFields);
         this.buildPageFormFromServerData(pageData);
         this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
         this.error = err.message;
       }
     });
@@ -128,7 +120,7 @@ export class Page implements OnInit {
 
       const rawFormData = this.pageForm.value;
       const formData = { ...rawFormData, id: this.currentEntityId };
-console.log('Submitting form data:', formData);
+
       this.dataService.updatePageData(this.currentPageId, formData)
         .subscribe({
           next: (response) => {

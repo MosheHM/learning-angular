@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
-import { FieldContainerComponent } from '../field-container/field-container.component';
+import { FieldContainerComponent } from '../field-container/field-container';
 import { FieldConfig } from '../../types/page.types';
 
 @Component({

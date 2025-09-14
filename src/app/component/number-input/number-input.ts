@@ -4,23 +4,26 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { FieldConfig } from '../../types/page.types';
 
 @Component({
-  selector: 'app-text-input',
+  selector: 'app-number-input',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './text-input.component.html',
-  styleUrls: ['./text-input.component.scss']
+  templateUrl: './number-input.html',
+  styleUrls: ['./number-input.scss']
 })
-export class TextInputComponent implements OnInit {
+export class NumberInputComponent implements OnInit {
   @Input() field: FieldConfig | null = null;
   @Input() form!: FormGroup;
   @Input() parent: any;
-  @Output() valueChange = new EventEmitter<string>();
+  @Output() valueChange = new EventEmitter<number>();
 
   formControl!: FormControl;
 
   ngOnInit() {
     if (this.field && this.form) {
       this.formControl = this.form.get(this.field.name) as FormControl;
+      if (!this.formControl) {
+        console.error(`FormControl for ${this.field.name} not found in parent form group.`);
+      }
     }
   }
 
@@ -28,12 +31,8 @@ export class TextInputComponent implements OnInit {
     return !!this.field?.input.validation?.required;
   }
 
-  get minLength(): number | undefined {
-    return this.field?.input.validation?.minLength;
-  }
-
-  get pattern(): string | undefined {
-    return this.field?.input.validation?.pattern;
+  get maxSize(): number | undefined {
+    return this.field?.input.validation?.maxSize;
   }
 
   get placeholder(): string {
@@ -45,7 +44,8 @@ export class TextInputComponent implements OnInit {
   }
 
   onInputChange(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.valueChange.emit(value);
+    const inputValue = (event.target as HTMLInputElement).value;
+    const numValue = inputValue ? parseFloat(inputValue) : null;
+    this.valueChange.emit(numValue as number);
   }
 }
