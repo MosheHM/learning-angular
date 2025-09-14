@@ -1,9 +1,3 @@
-@if (error) {
-  <div class="error-message">
-    {{ error }}
-  </div>
-}
-
 <form [formGroup]="pageForm" (ngSubmit)="onSubmit()" class="page-form">
   @defer (when !loading && !error) {
     <div class="app-page">

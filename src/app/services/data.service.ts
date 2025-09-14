@@ -28,15 +28,6 @@ export class DataService {
   }
 
   /**
-   * Generic POST request method
-   */
-  post<T>(endpoint: string, data: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}/${endpoint}`, data).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  /**
    * Generic PUT request method
    */
   put<T>(endpoint: string, data: any): Observable<T> {
@@ -45,24 +36,6 @@ export class DataService {
     );
   }
 
-  /**
-   * Generic DELETE request method
-   */
-  delete<T>(endpoint: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${endpoint}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  /**
-   * Fetch form fields data by page id
-   */
-  getFormFieldsByPageId<T>(pageId: string): Observable<T[]> {
-    return this.get<{formFields: T[]}>(pageId).pipe(
-      map(res => res.formFields),
-      catchError(this.handleError)
-    );
-  }
 
   /**
    * Get page data by page ID
@@ -100,10 +73,8 @@ export class DataService {
     let errorMessage = 'An unknown error occurred!';
 
     if (error.error instanceof ErrorEvent) {
-      // Client-side or network error
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // Backend returned an unsuccessful response code
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
 
