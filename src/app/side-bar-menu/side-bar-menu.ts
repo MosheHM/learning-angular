@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 interface MenuItem {
@@ -9,11 +9,12 @@ interface MenuItem {
 
 @Component({
   selector: 'app-side-bar-menu',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './side-bar-menu.html',
   styleUrl: './side-bar-menu.scss'
 })
 export class SideBarMenu {
+
   menuItems: MenuItem[] = [
     { id: 'orders', label: 'Orders' },
     { id: 'shipments', label: 'Shipments' },
@@ -21,9 +22,5 @@ export class SideBarMenu {
     { id: 'appeals', label: 'Appeals' }
   ];
 
-  constructor(private router: Router) {}
-
-  onMenuItemClick(item: MenuItem): void {
-    this.router.navigate(['/'], { queryParams: { section: item.id } });
-  }
+  constructor() {}
 }

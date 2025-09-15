@@ -5,13 +5,12 @@
       type="number"
       [id]="field.name"
       [name]="field.name"
-      [placeholder]="placeholder"
+      [placeholder]="field.placeholder"
       class="number-input"
       [class.error]="formControl.invalid && formControl.touched">
 
     @if (field.toolTipText) {
       <div class="tooltip">
-        <i class="info-icon">i</i>
         <span class="tooltip-text">{{ field.toolTipText }}</span>
       </div>
     }

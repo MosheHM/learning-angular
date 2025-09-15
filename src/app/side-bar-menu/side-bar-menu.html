@@ -1,15 +1,13 @@
 <div class="side-bar-menu">
   <nav class="sidebar-nav">
     <ul class="menu-list">
-      <li class="menu-item" *ngFor="let item of menuItems">
-        <button
-          class="menu-button"
-          (click)="onMenuItemClick(item)"
-          type="button"
-        >
+      @for (item of menuItems; track $index) {
+      <li class="menu-item">
+        <button class="menu-button" [routerLink]="['', item.id]" type="button">
           {{ item.label }}
         </button>
       </li>
+      }
     </ul>
   </nav>
 </div>

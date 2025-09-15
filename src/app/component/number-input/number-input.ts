@@ -13,7 +13,6 @@ import { FieldConfig } from '../../types/page.types';
 export class NumberInputComponent implements OnInit {
   @Input() field: FieldConfig | null = null;
   @Input() form!: FormGroup;
-  @Input() parent: any;
   @Output() valueChange = new EventEmitter<number>();
 
   formControl!: FormControl;
@@ -25,22 +24,6 @@ export class NumberInputComponent implements OnInit {
         console.error(`FormControl for ${this.field.name} not found in parent form group.`);
       }
     }
-  }
-
-  get isRequired(): boolean {
-    return !!this.field?.input.validation?.required;
-  }
-
-  get maxSize(): number | undefined {
-    return this.field?.input.validation?.maxSize;
-  }
-
-  get placeholder(): string {
-    return this.field?.placeholder || '';
-  }
-
-  get label(): string {
-    return this.field?.label || '';
   }
 
   onInputChange(event: Event): void {

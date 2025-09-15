@@ -4,9 +4,11 @@ import { ShellComponent } from './shell/shell.component';
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'orders',
+    pathMatch: 'full'
+  },
+  {
+    path: ':section',
     component: ShellComponent,
-    children: [
-      // Add child routes here as needed
-    ]
   }
 ];

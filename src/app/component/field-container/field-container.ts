@@ -15,6 +15,5 @@ import { FieldConfig } from '../../types/page.types';
 export class FieldContainerComponent {
   @Input() field: FieldConfig | null = null;
   @Input() form!: FormGroup;
-  @Input() parent: any;
   @Output() fieldChange = new EventEmitter<any>();
 }

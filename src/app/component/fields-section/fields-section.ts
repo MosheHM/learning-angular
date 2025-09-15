@@ -13,5 +13,4 @@ import { FieldConfig } from '../../types/page.types';
 export class FieldsSection {
   @Input() fields: FieldConfig[] = [];
   @Input() form!: FormGroup;
-  @Input() parent: any;
 }

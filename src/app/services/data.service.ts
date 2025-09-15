@@ -1,14 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { firstValueFrom, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { PageFormConfig, FieldConfig, FormSubmission, PageUpdateRequest, Field } from '../types/page.types';
-
-export interface ApiResponse<T> {
-  data: T;
-  success: boolean;
-  message?: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +10,7 @@ export interface ApiResponse<T> {
 export class DataService {
   private readonly baseUrl = 'https://my-json-server.typicode.com/MosheHM/learning-angular-db';
 
-  constructor(private http: HttpClient) {}
-
+  private http = inject(HttpClient);
   /**
    * Generic GET request method
    */
@@ -54,7 +47,7 @@ export class DataService {
    * Update page data
    */
   updatePageData(pageId: string, data: any): Observable<PageFormConfig> {
-    return this.put<PageFormConfig>(`pageData/${pageId}`, data);
+    return {} as Observable<PageFormConfig>;//mock implementation
   }
 
   /**

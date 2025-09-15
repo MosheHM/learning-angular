@@ -1,21 +1,11 @@
 .app-shell {
     display: flex;
     min-height: 100vh;
-}
-
-.main-content {
-    flex: 1;
-    margin-left: 250px;
-    display: flex;
-    flex-direction: column;
-}
-
-.shell-content {
-    flex: 1;
-    position: relative;
+    flex-direction: row;
 }
 
 .page-container {
+    flex: 1;
     height: 100%;
     width: 100%;
 }

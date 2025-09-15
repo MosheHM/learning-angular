@@ -5,15 +5,15 @@
       type="text"
       [id]="field.name"
       [name]="field.name"
-      [placeholder]="placeholder"
-      [attr.minlength]="minLength"
+      [placeholder]="field.placeholder || ''"
+      [attr.minlength]="field.input.validation?.minLength"
       class="text-input"
       [class.error]="formControl.invalid && formControl.touched">
 
     @if (field.toolTipText) {
       <div class="tooltip">
-        <i class="info-icon">i</i>
         <span class="tooltip-text">{{ field.toolTipText }}</span>
+        <span class="tooltip-text">{{ formControl.errors | json }}</span>
       </div>
     }
   }

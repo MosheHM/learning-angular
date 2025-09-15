@@ -15,11 +15,11 @@
     <div>
       @switch (field.input.dataType) {
         @case ('text') {
-        <app-text-input [field]="field" [form]="form" [parent]="parent">
+        <app-text-input [field]="field" [form]="form">
         </app-text-input>
         }
         @case ('number') {
-        <app-number-input [field]="field" [form]="form" [parent]="parent">
+        <app-number-input [field]="field" [form]="form">
         </app-number-input>
         }
         @default {
@@ -28,7 +28,7 @@
         }
     </div>
 
-    @if (parent?.isFieldInvalid(field.name)) {
+    @if (form.get(field.name)?.invalid && form.get(field.name)?.touched) {
     <div class="field-error">
       {{ field.name }} is invalid.
     </div>

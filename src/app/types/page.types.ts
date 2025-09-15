@@ -6,8 +6,13 @@ export interface FieldConfig {
   name: string;
   label: string;
   layout?: {
-    sectionId?: string;
-    order?: number;
+    formLayout?: {
+      sectionId?: string;
+      order?: number;
+    },
+    gridLayout?: {
+      order?: number;
+    }
   };
   input: {
     dataType: string;
@@ -29,17 +34,17 @@ export interface FormSubmission {
   submittedBy?: string;
 }
 
-export type fieldValue = number | string;
+export type FieldValue = number | string;
 export interface Field {
     name: string;
-    value: fieldValue | null;
+    value: FieldValue | null;
 }
 
 export interface PageData {
     fields: Field[];
 };
 
-export type FieldsPageDataForm = Record<string, fieldValue | null>;
+export type EntityData = Record<string, FieldValue | null>;
 
 export interface PageUpdateRequest {
   formFields?: FieldConfig[];

@@ -1,37 +1,21 @@
 <form [formGroup]="pageForm" (ngSubmit)="onSubmit()" class="page-form">
-  @defer (when !loading && !error) {
     <div class="app-page">
-      @if (leftSectionFields$ | async; as leftSectionFields) {
+      @if (leftSectionFields) {
         <app-fields-section
           [fields]="leftSectionFields"
-          [form]="pageForm"
-          [parent]="this" />
+          [form]="pageForm"/>
       }
-      @if (rightSectionFields$ | async; as rightSectionFields) {
+      @if (rightSectionFields) {
         <app-fields-section
           [fields]="rightSectionFields"
-          [form]="pageForm"
-          [parent]="this" />
+          [form]="pageForm"/>
       }
     </div>
-  }
-
-  @loading {
-    <div class="loading-container">
-      <div>Loading...</div>
-    </div>
-  }
-
-  @error {
-    <div class="error-container">
-      <div>Error loading page.</div>
-    </div>
-  }
 
   <div class="form-actions">
     <app-submit-button
       label="Submit Form"
-      [loading]="submitting"
+      [loading]="pageForm.pending"
       [disabled]="pageForm.invalid"
       variant="primary"
       (submitClick)="onSubmit()">
