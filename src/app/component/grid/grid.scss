@@ -1,0 +1,29 @@
+.grid-container {
+  width: 100%;
+  padding: 1rem;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  
+  app-display-text {
+    flex: 1 1 300px;
+    min-width: 0;
+    max-width: 400px;
+  }
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  
+  p {
+    color: #6b7280;
+    font-size: 1rem;
+  }
+}

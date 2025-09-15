@@ -10,10 +10,10 @@ import { FieldConfig, FieldValue, EntityData } from '../../types/page.types';
 @Component({
   selector: 'app-page',
   imports: [FieldsSection, ReactiveFormsModule, SubmitButtonComponent],
-  templateUrl: './page.html',
-  styleUrl: './page.scss'
+  templateUrl: './page-form.html',
+  styleUrl: './page-form.scss'
 })
-export class Page implements OnInit {
+export class PageForm implements OnInit {
   pageForm!: FormGroup<Record<string, FormControl<FieldValue | null>>>;
   leftSectionFields: FieldConfig[] = [];
   rightSectionFields: FieldConfig[] = [];

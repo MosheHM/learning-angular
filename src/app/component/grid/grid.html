@@ -1,0 +1,17 @@
+<div class="grid-container">
+  @if (gridFields.length > 0) {
+    <div class="grid">
+      @for (field of gridFields; track field.name) {
+        <app-display-text
+          [label]="field.label"
+          [value]="getFieldValue(field.name)"
+          [toolTipText]="field.toolTipText">
+        </app-display-text>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <p>No fields to display</p>
+    </div>
+  }
+</div>
