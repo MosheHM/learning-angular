@@ -31,21 +31,15 @@ export class PageForm implements OnInit {
     });
   }
 
-  private loadPageData(pageId: string): void {
+  private async loadPageData(pageId: string): Promise<void> {
     
-    forkJoin({
-      pageConfig: this.dataService.getPageById(pageId),
-      pageData: this.dataService.getPageData(pageId, this.currentEntityId)
-    }).subscribe({
-      next: ({ pageConfig, pageData }) => {
+    const [pageConfig, pageData] = await Promise.all([
+        this.dataService.getPageById(pageId),
+        this.dataService.getPageData(pageId, this.currentEntityId)
+      ]);
 
-        this.splitToSections(pageConfig.formFields);
-        this.buildPageFormFromServerData(pageData, pageConfig.formFields);
-      },
-      error: (err) => {
-        console.error('Error loading page data:', err);
-      }
-    });
+      this.splitToSections(pageConfig.formFields);
+      this.buildPageFormFromServerData(pageData, pageConfig.formFields);
   }
 
   private buildPageFormFromServerData(pageFields: EntityData, fieldsConfig: FieldConfig[]): void {
