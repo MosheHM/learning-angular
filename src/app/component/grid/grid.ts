@@ -27,20 +27,17 @@ export class Grid implements OnInit {
     });
   }
 
-  private loadGridData(pageId: string): void {
-    forkJoin({
-      pageConfig: this.dataService.getPageById(pageId),
-      pageData: this.dataService.getPageData(pageId, this.currentEntityId)
-    }).subscribe({
-      next: ({ pageConfig, pageData }) => {
-        this.gridFields = this.sortFieldsByGridOrder(pageConfig.formFields);
-        this.entityData = pageData;
-      },
-      error: (err) => {
-        console.error('Error loading grid data:', err);
-      }
+  private async loadGridData(pageId: string): Promise<void> {
+
+    await Promise.all([
+      this.dataService.getPageById(pageId),
+      this.dataService.getPageData(pageId, this.currentEntityId)
+    ]).then(([pageConfig, pageData]) => {
+      this.gridFields = this.sortFieldsByGridOrder(pageConfig.formFields);
+      this.entityData = pageData;
     });
   }
+  
 
   private sortFieldsByGridOrder(fields: FieldConfig[]): FieldConfig[] {
     return fields.sort((a, b) => 

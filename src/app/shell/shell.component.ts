@@ -12,7 +12,7 @@ import { Grid } from '../component/grid/grid';
     <div class="app-shell">
         <app-side-bar-menu></app-side-bar-menu>
         <div class="page-container">
-          <app-page></app-page>
+          <app-page-form></app-page-form>
           <app-grid></app-grid>
         </div>
     </div>

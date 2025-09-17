@@ -8,7 +8,7 @@ import { DataService } from '../../services/data.service';
 import { FieldConfig, FieldValue, EntityData } from '../../types/page.types';
 
 @Component({
-  selector: 'app-page',
+  selector: 'app-page-form',
   imports: [FieldsSection, ReactiveFormsModule, SubmitButtonComponent],
   templateUrl: './page-form.html',
   styleUrl: './page-form.scss'
@@ -34,12 +34,12 @@ export class PageForm implements OnInit {
   private async loadPageData(pageId: string): Promise<void> {
     
     const [pageConfig, pageData] = await Promise.all([
-        this.dataService.getPageById(pageId),
-        this.dataService.getPageData(pageId, this.currentEntityId)
-      ]);
+      this.dataService.getPageById(pageId),
+      this.dataService.getPageData(pageId, this.currentEntityId)
+    ]);
 
-      this.splitToSections(pageConfig.formFields);
-      this.buildPageFormFromServerData(pageData, pageConfig.formFields);
+    this.splitToSections(pageConfig.formFields);
+    this.buildPageFormFromServerData(pageData, pageConfig.formFields);
   }
 
   private buildPageFormFromServerData(pageFields: EntityData, fieldsConfig: FieldConfig[]): void {
